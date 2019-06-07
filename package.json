@@ -1,0 +1,32 @@
+{
+  "name": "code-sweet",
+  "version": "1.0.0",
+  "description": "Tools to automatically setup an environment for multiple languages.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Trevor Sundberg",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^16.27.3",
+    "@types/json-schema": "^7.0.3",
+    "@types/memory-fs": "^0.3.2",
+    "@types/node-fetch": "^2.3.3",
+    "@types/traverse": "^0.6.32",
+    "ajv": "^6.10.0",
+    "json-schema": "^0.2.3",
+    "memfs": "^2.15.4",
+    "node-fetch": "^2.5.0",
+    "title-case": "^2.1.1",
+    "traverse": "^0.6.6",
+    "typescript": "^3.4.5",
+    "typescript-json-schema": "^0.38.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.13.0"
+  }
+}

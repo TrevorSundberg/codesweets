@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "target":"es2018",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "outDir": "bin"
+  },
+  "files": [
+    "index.ts",
+    "modules/task.ts",
+    "modules/file-system.ts",
+    "modules/git-repository.ts",
+    "modules/github-authorization.ts",
+    "modules/github-create-repository.ts"
+  ],
+}

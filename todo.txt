@@ -1,0 +1,3 @@
+Setup webpack with React - https://www.valentinog.com/blog/babel/
+Get React JSX working with TypeScript
+Building with a build server (Travis CI)
