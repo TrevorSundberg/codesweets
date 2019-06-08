@@ -1,10 +1,10 @@
-import { JSONSchema6 } from 'json-schema'
-import * as TJS from 'typescript-json-schema';
-import traverse from 'traverse';
-import titleCase from 'title-case';
-import Ajv from 'ajv'
+import * as TJS from "typescript-json-schema";
+import Ajv from "ajv";
+import {JSONSchema6} from "json-schema";
+import titleCase from "title-case";
+import traverse from "traverse";
 
-const ajv = new Ajv()
+const ajv = new Ajv();
 
 interface TypeScriptType {
   __filename: string;
@@ -12,10 +12,10 @@ interface TypeScriptType {
 }
 
 const settings: TJS.PartialArgs = {
-  titles: true,
-  required: true,
   excludePrivate: true,
   ignoreErrors: true,
+  required: true,
+  titles: true
 };
 
 interface TaskMetaInit {
@@ -35,39 +35,39 @@ export default class TaskMeta {
   public readonly inputs: Function[] = [];
   public readonly outputs: Function[] = [];
   public readonly validate: (data: any) => string | null;
-
-  public constructor(init: TaskMetaInit) {
+  public constructor (init: TaskMetaInit) {
     this.construct = init.construct;
     if (!init.construct) {
-      throw new Error('Parameter \'construct\' is required and must be the constructor for the class it represents')
+      throw new Error("Parameter 'construct' is required and must " +
+        "be the constructor for the class it represents");
     }
     if (init.schema) {
-      this.schema = init.schema
+      this.schema = init.schema;
     } else if (init.tsFile) {
-      let tsFile = init.tsFile
-      if (tsFile.endsWith('.js')) {
-        tsFile = tsFile.replace('.js', '.ts').replace('/bin/', '/')
+      let {tsFile} = init;
+      if (tsFile.endsWith(".js")) {
+        tsFile = tsFile.replace(".js", ".ts").replace("/bin/", "/");
       }
-      const program = TJS.getProgramFromFiles([tsFile])
-      const schema = TJS.generateSchema(program, `${this.construct.name}Data`, settings) as JSONSchema6
-      traverse(schema).forEach(node => {
+      const program = TJS.getProgramFromFiles([tsFile]);
+      const schema = TJS.generateSchema(program, `${this.construct.name}Data`, settings) as JSONSchema6;
+      traverse(schema).forEach((node) => {
         if (node.title) {
-          node.title = titleCase(node.title)
+          node.title = titleCase(node.title);
         }
-      })
+      });
       this.schema = schema;
     } else {
-      this.schema = {}
+      this.schema = {};
     }
 
     if (init.schemaTransform) {
-      init.schemaTransform(this.schema)
+      init.schemaTransform(this.schema);
     }
 
     this.uiSchema = init.uiSchema || {};
     this.inputs = init.inputs || [];
     this.outputs = init.outputs || [];
     const ajvValidate = ajv.compile(this.schema);
-    this.validate = data => ajvValidate(data) ? null : ajv.errorsText(ajvValidate.errors);
+    this.validate = (data) => ajvValidate(data) ? null : ajv.errorsText(ajvValidate.errors);
   }
 }

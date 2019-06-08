@@ -1,20 +1,16 @@
-import TaskMeta from '../core/task-meta'
-import FileSystem from './file-system'
+import FileSystem from "./file-system";
+import TaskMeta from "../core/task-meta";
 
-class GitRepositoryData {
-  public clone_url: string
-  public username?: string
-  public password_or_token?: string
+interface GitRepositoryData {
+  clone_url: string;
+  username?: string;
+  password_or_token?: string;
 }
 
 export default class GitRepository extends FileSystem<GitRepositoryData> {
   public static meta = new TaskMeta({
     construct: GitRepository,
-    tsFile: __filename,
-    outputs: [FileSystem]
+    outputs: [FileSystem],
+    tsFile: __filename
   })
-
-  public commit(): void {
-    throw new Error("Method not implemented.");
-  }
 }

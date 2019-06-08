@@ -1,68 +1,98 @@
-import Task from '../core/task'
-import TaskRoot from '../core/task-root'
-import TaskMeta from '../core/task-meta'
-import assert from 'assert'
-import TaskWithData from '../core/task-with-data';
+/* eslint-disable sort-keys */
+/* eslint-disable max-classes-per-file */
+import Task from "../core/task";
+import TaskMeta from "../core/task-meta";
+import TaskRoot from "../core/task-root";
+import TaskWithData from "../core/task-with-data";
+import assert from "assert";
 
-const assertException = (callback: Function, message? : string) => {
+const assertException = (thrower: Function, message? : string) => {
   try {
-    callback()
+    thrower();
   } catch (err) {
     if (message && !err.message.includes(message)) {
-      assert(false, 'Exception did not contain the expected text')
+      assert(false, "Exception did not contain the expected text");
     }
-    return
+    return;
   }
-  assert(false, 'Exception was not thrown')
-}
+  assert(false, "Exception was not thrown");
+};
 
 class Yarn extends Task {
-  public static meta = new TaskMeta({ construct: Yarn })
+  public static meta = new TaskMeta({construct: Yarn})
 }
 
 class Hairball extends Task {
-  public static meta = new TaskMeta({ construct: Hairball })
+  public static meta = new TaskMeta({construct: Hairball})
 }
 
 class Animal<T> extends TaskWithData<T> {
-  public static meta = new TaskMeta({ construct: Animal })
+  public static meta = new TaskMeta({construct: Animal})
 }
 
 interface CatData {
-  type: 'tabby' | 'calico' | 'black';
-  name: string; 
+  type: "tabby" | "calico" | "black";
+  name: string;
   hairs?: number;
 }
 
 class Cat extends Animal<CatData> {
   public static meta = new TaskMeta({
     construct: Cat,
-    tsFile: __filename,
     inputs: [Yarn],
-    outputs: [Animal, Hairball]
+    outputs: [
+      Animal,
+      Hairball
+    ],
+    tsFile: __filename
   })
-
-  public async initialize() {
-    assert(this.has<Hairball>(Hairball) == null)
-    const hairball = new Hairball(this)
-    assert(this.components[0] === hairball)
-    assert(this.has<Hairball>(Hairball) === hairball)
+  public async initialize () {
+    assert(this.has<Hairball>(Hairball) === null);
+    const hairball = new Hairball(this);
+    assert(this.components[0] === hairball);
+    assert(this.has<Hairball>(Hairball) === hairball);
   }
 }
 
 const root = new TaskRoot();
 
 const yarn = new Yarn(root);
-assert(root.components[0] === yarn)
+assert(root.components[0] === yarn);
 
-assertException(() => new Cat(root, {} as any))
+assertException(() => new Cat(root, {} as any));
 
-const cat = new Cat(root, { type: 'tabby', name: 'Bob' })
-assert(root.components[1] === cat)
-assert(cat.sibling<Yarn>(Yarn) === yarn)
-assert(cat.has<Task>(Animal) === cat)
+const cat = new Cat(root, {name: "Bob", type: "tabby"});
+assert(root.components[1] === cat);
+assert(cat.sibling<Yarn>(Yarn) === yarn);
+assert(cat.has<Task>(Animal) === cat);
 
-root.initialize()
+root.initialize();
 
-const catSchema = {"type":"object","properties":{"type":{"enum":["black","calico","tabby"],"type":"string","title":"Type"},"name":{"type":"string","title":"Name"},"hairs":{"type":"number","title":"Hairs"}},"required":["name","type"],"$schema":"http://json-schema.org/draft-07/schema#"}
-assert(JSON.stringify(Cat.meta.schema) === JSON.stringify(catSchema))
+const catSchema = {
+  type: "object",
+  properties: {
+    type: {
+      enum: [
+        "black",
+        "calico",
+        "tabby"
+      ],
+      type: "string",
+      title: "Type"
+    },
+    name: {
+      type: "string",
+      title: "Name"
+    },
+    hairs: {
+      type: "number",
+      title: "Hairs"
+    }
+  },
+  required: [
+    "name",
+    "type"
+  ],
+  $schema: "http://json-schema.org/draft-07/schema#"
+};
+assert(JSON.stringify(Cat.meta.schema) === JSON.stringify(catSchema));

@@ -4,7 +4,7 @@
   "description": "Tools to automatically setup an environment for multiple languages.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "eslint --ext .ts . && tsc",
     "start": "npm run build && node bin/index.js"
   },
   "author": "Trevor Sundberg",
@@ -19,6 +19,7 @@
     "json-schema": "^0.2.3",
     "memfs": "^2.15.4",
     "node-fetch": "^2.5.0",
+    "react": "^16.8.6",
     "title-case": "^2.1.1",
     "traverse": "^0.6.6",
     "typescript": "^3.4.5",
