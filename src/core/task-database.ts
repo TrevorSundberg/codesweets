@@ -1,4 +1,3 @@
-//import Task from './task'
 import TaskMeta from './task-meta'
 
 // interfaces
@@ -13,15 +12,6 @@ import TaskMeta from './task-meta'
 // Easiest possible interface right now is to make it so we can add the abstract class anyways
 // Not great, but it will make it so we can move forward quickly / do replacement UI instead
 
-
-
 export default class TaskDatabase {
-    private metas: TaskMeta[] = [];
-
-    //public enumerateAdd(task: Task): TaskMeta[] {
-    //    for (const meta of this.metas) {
-    //  
-    //    }
-    //    return null
-    //}
+  private metas: TaskMeta[] = [];
 }

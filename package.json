@@ -4,7 +4,8 @@
   "description": "Tools to automatically setup an environment for multiple languages.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "npm run build && node bin/index.js"
   },
   "author": "Trevor Sundberg",
   "license": "MIT",

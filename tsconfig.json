@@ -11,10 +11,15 @@
   },
   "files": [
     "index.ts",
-    "modules/task.ts",
-    "modules/file-system.ts",
-    "modules/git-repository.ts",
-    "modules/github-authorization.ts",
-    "modules/github-create-repository.ts"
+    "src/core/task-database.ts",
+    "src/core/task-meta.ts",
+    "src/core/task-root.ts",
+    "src/core/task-with-data.ts",
+    "src/core/task.ts",
+    "src/tasks/file-system.ts",
+    "src/tasks/file.ts",
+    "src/tasks/git-repository.ts",
+    "src/tasks/github-authorization.ts",
+    "src/tasks/github-create-repository.ts"
   ],
 }
