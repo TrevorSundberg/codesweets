@@ -1,17 +1,24 @@
 import {EventEmitter} from "events";
 import TaskMeta from "./task-meta";
 
+process.env.MEMFS_DONT_WARN = true as unknown as string;
+import {Volume} from "memfs";
+
 export default class Task extends EventEmitter {
   public static meta = new TaskMeta({
     construct: Task,
     outputs: [Task]
   })
+  public readonly root: Task;
   public readonly owner: Task;
   public readonly ownerIndex: number;
   public readonly dependencies: Task[] = [];
   public readonly dependents: Task[] = [];
   public readonly components: Task[] = [];
   public readonly rawData: any;
+  public get fs (): InstanceType<typeof Volume> {
+    return this.root.fs;
+  }
   public constructor (owner: Task, data: any = {}) {
     super();
 
@@ -42,7 +49,10 @@ export default class Task extends EventEmitter {
     }
 
     if (owner) {
+      this.root = owner.root;
       owner.add(this);
+    } else {
+      this.root = this;
     }
   }
   public get meta (): TaskMeta {

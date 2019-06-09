@@ -16,6 +16,7 @@
     "@types/node-fetch": "^2.3.3",
     "@types/traverse": "^0.6.32",
     "ajv": "^6.10.0",
+    "isomorphic-git": "^0.55.2",
     "json-schema": "^0.2.3",
     "memfs": "^2.15.4",
     "node-fetch": "^2.5.0",

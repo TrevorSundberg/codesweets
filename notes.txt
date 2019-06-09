@@ -1,3 +1,8 @@
+I think we should have just one filesystem and then we write to directories within that filesystem
+ - It would make copies and file systems much easier
+
+Maybe the task root should just pick a directory and use fs
+
 This is a node system with inputs and outputs
 The nodes are heterogenous
 

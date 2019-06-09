@@ -46,7 +46,7 @@ class Cat extends Animal<CatData> {
     ],
     tsFile: __filename
   })
-  public async initialize () {
+  protected async initialize () {
     assert(this.has<Hairball>(Hairball) === null);
     const hairball = new Hairball(this);
     assert(this.components[0] === hairball);

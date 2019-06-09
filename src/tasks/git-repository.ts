@@ -1,8 +1,9 @@
+import * as git from "isomorphic-git";
 import FileSystem from "./file-system";
 import TaskMeta from "../core/task-meta";
 
 interface GitRepositoryData {
-  clone_url: string;
+  url: string;
   username?: string;
   password_or_token?: string;
 }
@@ -13,4 +14,12 @@ export default class GitRepository extends FileSystem<GitRepositoryData> {
     outputs: [FileSystem],
     tsFile: __filename
   })
+  public git = git
+  public get args () {
+    return {
+      dir: this.directory,
+      fs: this.fs,
+      url: this.data.url
+    };
+  }
 }

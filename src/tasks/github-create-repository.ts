@@ -81,7 +81,7 @@ export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRep
     outputs: [GitRepository],
     tsFile: __filename
   })
-  public async initialize (auth: GitHubAuthorization) {
+  protected async initialize (auth: GitHubAuthorization) {
     await auth.octokit.repos.createForAuthenticatedUser(this.data);
     await super.initialize();
   }

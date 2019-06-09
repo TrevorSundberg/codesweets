@@ -18,6 +18,7 @@
     "src/core/task.ts",
     "src/tasks/file-system.ts",
     "src/tasks/file.ts",
+    "src/tasks/git-clone.ts",
     "src/tasks/git-repository.ts",
     "src/tasks/github-authorization.ts",
     "src/tasks/github-create-repository.ts"

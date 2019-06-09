@@ -47,6 +47,8 @@ module.exports = {
     "no-magic-numbers": "off",
     "no-new": "off",
     "require-await": "off",
+    "class-methods-use-this": "off",
+    "@typescript-eslint/camelcase": "off",
   },
   settings: {
     react: {

@@ -19,7 +19,7 @@ export default class GitHubAuthorization extends TaskWithData<GitHubAuthorizatio
     tsFile: __filename
   })
   public octokit: Octokit
-  public async initialize () {
+  protected async initialize () {
     const data = this.data as any;
     data.on2fa = () => {
       throw new Error("Two factor authentication is not yet supported");
