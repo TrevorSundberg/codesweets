@@ -4,6 +4,14 @@ import TaskMeta from "./task-meta";
 process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
 
+export type TaskData = Record<string, any>
+
+export interface TaskSaved {
+  typename: string;
+  data?: TaskData;
+  components?: TaskSaved[];
+}
+
 export default class Task extends EventEmitter {
   public static meta = new TaskMeta({
     construct: Task,
@@ -22,7 +30,9 @@ export default class Task extends EventEmitter {
 
   public readonly components: Task[] = [];
 
-  public readonly rawData: any;
+  public readonly rawData: TaskData;
+
+  private phase: "constructed" | "initialized" = "constructed";
 
   public get fs (): InstanceType<typeof Volume> {
     return this.root.fs;
@@ -32,7 +42,7 @@ export default class Task extends EventEmitter {
     return this.root.log;
   }
 
-  public constructor (owner: Task, data: any = {}) {
+  public constructor (owner: Task, data: TaskData = {}) {
     super();
 
     this.root = owner ? owner.root : this;
@@ -60,6 +70,26 @@ export default class Task extends EventEmitter {
         `static meta : TaskMeta = new TaskMeta(${this.constructor.name}, ...)`);
     }
     return meta;
+  }
+
+  /**
+   * Serialize the task and it's child components.
+   * Only call this once constructed (not during or after initialization).
+   */
+  public serialize (): TaskSaved {
+    if (this.phase !== "constructed") {
+      throw Error(`Only serialize a task when constructed (task was '${this.phase}')`);
+    }
+    const result: TaskSaved = {
+      typename: this.constructor.name
+    };
+    if (Object.values(this.rawData).length !== 0) {
+      result.data = this.rawData;
+    }
+    if (this.components.length !== 0) {
+      result.components = this.components.map((component) => component.serialize());
+    }
+    return result;
   }
 
   public static isA (derived: Function, base: Function): boolean {
@@ -160,6 +190,7 @@ export default class Task extends EventEmitter {
       }
 
       await component.onInitialize(...component.dependencies);
+      component.phase = "initialized";
     });
   }
 

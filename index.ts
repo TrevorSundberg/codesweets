@@ -24,6 +24,8 @@ import TaskRoot from "./src/core/task-root";
   new FileCreate(root, {content: "console.log('hello')\nconsole.log('world')", encoding: "utf8", path: "index.js"});
   new GitAddCommitPush(root, {add_path: ".", message: "First commit test"});
 
+  console.log(JSON.stringify(root.serialize(), null, 2));
+
   await root.run();
 
   console.log(root.fs.toJSON("/"));

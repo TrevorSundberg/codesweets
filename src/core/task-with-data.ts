@@ -1,8 +1,8 @@
-import Task from "./task";
+import Task, {TaskData} from "./task";
 
-export default class TaskWithData<T = any> extends Task {
+export default class TaskWithData<T extends TaskData = TaskData> extends Task {
   public get data (): T {
-    return this.rawData;
+    return this.rawData as T;
   }
 
   // eslint-disable-next-line no-useless-constructor
