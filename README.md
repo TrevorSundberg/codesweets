@@ -4,5 +4,5 @@ Quickly setup project repositories with templates, tests, documentation, and con
 # getting started
 ```
 npm install
-npm start
+USER=your_username PASS=your_password_or_access_token npm start
 ```
