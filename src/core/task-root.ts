@@ -16,7 +16,7 @@ export default class TaskRoot extends Task {
   public constructor () {
     super(null);
   }
-  public initialize (...args: any[]) {
-    return super.initialize(args);
+  public initialize () {
+    return super.initialize();
   }
 }

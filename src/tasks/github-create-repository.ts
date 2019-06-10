@@ -1,9 +1,10 @@
+import {DirectoryData} from "./directory";
 import GitHubAuthorization from "./github-authorization";
 import GitRepository from "./git-repository";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-interface GitHubCreateRepositoryData {
+interface GitHubCreateRepositoryData extends DirectoryData {
 
   /** The name of the repository. */
   name: string;
@@ -81,8 +82,19 @@ export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRep
     outputs: [GitRepository],
     tsFile: __filename
   })
-  protected async initialize (auth: GitHubAuthorization) {
-    await auth.octokit.repos.createForAuthenticatedUser(this.data);
-    await super.initialize();
+  protected async onInitialize (auth: GitHubAuthorization) {
+    const response = await auth.octokit.repos.createForAuthenticatedUser(this.data);
+    const url = response.data.clone_url;
+    const repo = new GitRepository(this, {
+      directory: this.data.directory,
+      password_or_token: auth.data.password_or_token,
+      url,
+      username: response.data.owner.login
+    });
+    repo.git.init(repo.args);
+    repo.git.addRemote({
+      ...repo.args,
+      remote: url
+    });
   }
 }

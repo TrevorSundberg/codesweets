@@ -32,22 +32,6 @@ export default class Task extends EventEmitter {
     this.owner = owner;
     this.ownerIndex = owner ? owner.components.length : -1;
 
-    const ourName = this.constructor.name;
-    const {inputs} = this.meta;
-
-    for (const input of inputs) {
-      if (!this.sibling(input)) {
-        throw new Error(`Missing dependency ${input.name} in task ${ourName}`);
-      }
-    }
-
-    // Done with validation; add dependencies and owner.
-    for (const input of inputs) {
-      const dependency = this.sibling(input);
-      this.dependencies.push(dependency);
-      dependency.dependents.push(this);
-    }
-
     if (owner) {
       this.root = owner.root;
       owner.add(this);
@@ -78,20 +62,28 @@ export default class Task extends EventEmitter {
       throw new Error(`${type.name} is not an output of ${this.constructor.name}`);
     }
   }
-  public has<T extends Task> (base: Function, index?: number): T {
-    this.ensure(base);
+  public has<T extends Task = Task> (base: Function, index?: number): T {
     if (Task.isA(this.constructor, base)) {
       return this as Task as T;
     }
 
     // Find the first component above this index (dependency order) that is closest to the index.
-    return this.components.slice(0, index).reverse().
-      find((component: Task) => Task.isA(component.constructor, base)) as T || null;
+    const nearest = this.components.slice(0, index).reverse();
+    for (const component of nearest) {
+      if (Task.isA(component.constructor, base)) {
+        return component as T;
+      }
+      const child = component.has(base);
+      if (child) {
+        return child as T;
+      }
+    }
+    return null;
   }
-  public sibling<T extends Task> (base: Function) {
+  public sibling<T extends Task = Task> (base: Function) {
     return this.owner ? this.owner.has<T>(base, this.ownerIndex) : null;
   }
-  private add<T extends Task> (value: T) {
+  private add<T extends Task = Task> (value: T) {
     const {constructor} = value;
     this.ensure(constructor);
 
@@ -104,10 +96,25 @@ export default class Task extends EventEmitter {
 
     this.components.push(value);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected async initialize (...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function
+  protected async onInitialize (...args: any[]) {
+  }
+  protected async initialize () {
     for (const component of this.components) {
-      await component.initialize(...component.dependencies);
+      const {name} = component.constructor;
+      const {inputs} = component.meta;
+
+      for (const input of inputs) {
+        const dependency = component.sibling(input);
+        if (!dependency) {
+          throw new Error(`Missing dependency ${input.name} in task ${name}`);
+        }
+        component.dependencies.push(dependency);
+        dependency.dependents.push(this);
+      }
+
+      await component.onInitialize(...component.dependencies);
+      await component.initialize();
     }
   }
 }

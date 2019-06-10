@@ -49,6 +49,8 @@ module.exports = {
     "require-await": "off",
     "class-methods-use-this": "off",
     "@typescript-eslint/camelcase": "off",
+
+    "default-case": "off",
   },
   settings: {
     react: {

@@ -1,25 +1,27 @@
 import * as git from "isomorphic-git";
-import FileSystem from "./file-system";
+import Directory, {DirectoryData} from "./directory";
 import TaskMeta from "../core/task-meta";
 
-interface GitRepositoryData {
+interface GitRepositoryData extends DirectoryData {
   url: string;
   username?: string;
   password_or_token?: string;
 }
 
-export default class GitRepository extends FileSystem<GitRepositoryData> {
+export default class GitRepository extends Directory<GitRepositoryData> {
   public static meta = new TaskMeta({
     construct: GitRepository,
-    outputs: [FileSystem],
+    outputs: [Directory],
     tsFile: __filename
   })
   public git = git
   public get args () {
     return {
-      dir: this.directory,
+      dir: this.data.directory,
       fs: this.fs,
-      url: this.data.url
+      password: this.data.password_or_token,
+      url: this.data.url,
+      username: this.data.username
     };
   }
 }

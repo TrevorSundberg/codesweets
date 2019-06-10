@@ -1,6 +1,6 @@
 import Task from "./task";
 
-export default class TaskWithData<T> extends Task {
+export default class TaskWithData<T = any> extends Task {
   public get data (): T {
     return this.rawData;
   }
