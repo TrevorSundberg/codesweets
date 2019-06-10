@@ -16,6 +16,7 @@ export default abstract class Directory<T extends DirectoryData = DirectoryData>
     assert(path.isAbsolute(workingDir));
     return workingDir;
   }
+
   public static resolve (task: Task, filePath: string) {
     return path.resolve(Directory.getWorkingDirectory(task), filePath);
   }

@@ -14,13 +14,15 @@ import TaskRoot from "./src/core/task-root";
 
   const root = new TaskRoot();
 
-  new GitHubAuthorization(root, {
-    password_or_token: "123",
-    username: "TrevorSundberg"
-  });
+  const png =
+    "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJ0lEQVR42mP4/5/h" +
+    "Pz7MQJQCBgYIhgsi8RmItgLdBKwKkDFpjsSHAasyq1WQq/GGAAAAAElFTkSuQmCC";
+
+  new GitHubAuthorization(root, {password_or_token: process.env.PASS, username: process.env.USER});
   new GitHubCreateRepository(root, {directory: "/", name: "sample"});
   new GitClone(root);
-  new FileCreate(root, {content: "This is is a test", encoding: "utf8", path: "test.txt"});
+  new FileCreate(root, {content: "This is is a test", encoding: "utf8", path: "README.md"});
+  new FileCreate(root, {content: png, encoding: "base64", path: "test.png"});
   new FileCreate(root, {content: "console.log('hello')\nconsole.log('world')", encoding: "utf8", path: "index.js"});
   new GitAdd(root, {filepath: "."});
   new GitCommit(root, {message: "First commit test"});

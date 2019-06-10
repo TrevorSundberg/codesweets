@@ -47,6 +47,7 @@ export default async () => {
       ],
       tsFile: __filename
     })
+
     protected async onInitialize () {
       assert(this.has<Hairball>(Hairball) === null);
       const hairball = new Hairball(this);

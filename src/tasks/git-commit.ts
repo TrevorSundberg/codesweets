@@ -11,6 +11,7 @@ export default class GitCommit extends TaskWithData<GitCommitData> {
     construct: GitCommit,
     inputs: [GitRepository]
   })
+
   protected async onInitialize (repo: GitRepository) {
     await repo.git.commit({
       ...repo.args,

@@ -82,6 +82,7 @@ export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRep
     outputs: [GitRepository],
     tsFile: __filename
   })
+
   protected async onInitialize (auth: GitHubAuthorization) {
     const response = await auth.octokit.repos.createForAuthenticatedUser(this.data);
     const url = response.data.clone_url;

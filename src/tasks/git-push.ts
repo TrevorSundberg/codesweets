@@ -7,6 +7,7 @@ export default class GitPush extends Task {
     construct: GitPush,
     inputs: [GitRepository]
   })
+
   protected async onInitialize (repo: GitRepository) {
     await repo.git.push(repo.args);
   }

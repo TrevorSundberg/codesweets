@@ -14,7 +14,9 @@ export default class GitRepository extends Directory<GitRepositoryData> {
     outputs: [Directory],
     tsFile: __filename
   })
+
   public git = git
+
   public get args () {
     return {
       dir: this.data.directory,

@@ -9,16 +9,25 @@ export default class Task extends EventEmitter {
     construct: Task,
     outputs: [Task]
   })
+
   public readonly root: Task;
+
   public readonly owner: Task;
+
   public readonly ownerIndex: number;
+
   public readonly dependencies: Task[] = [];
+
   public readonly dependents: Task[] = [];
+
   public readonly components: Task[] = [];
+
   public readonly rawData: any;
+
   public get fs (): InstanceType<typeof Volume> {
     return this.root.fs;
   }
+
   public constructor (owner: Task, data: any = {}) {
     super();
 
@@ -39,6 +48,7 @@ export default class Task extends EventEmitter {
       this.root = this;
     }
   }
+
   public get meta (): TaskMeta {
     const {meta} = this.constructor as any;
     if (this.constructor !== meta.construct) {
@@ -47,6 +57,7 @@ export default class Task extends EventEmitter {
     }
     return meta;
   }
+
   public static isA (derived: Function, base: Function): boolean {
     let type = derived;
     while (type) {
@@ -57,11 +68,13 @@ export default class Task extends EventEmitter {
     }
     return false;
   }
+
   private ensure (type: Function): void {
     if (!this.meta.outputs.find((func) => Task.isA(type, func))) {
       throw new Error(`${type.name} is not an output of ${this.constructor.name}`);
     }
   }
+
   public has<T extends Task = Task> (base: Function, index?: number): T {
     if (Task.isA(this.constructor, base)) {
       return this as Task as T;
@@ -80,9 +93,11 @@ export default class Task extends EventEmitter {
     }
     return null;
   }
+
   public sibling<T extends Task = Task> (base: Function) {
     return this.owner ? this.owner.has<T>(base, this.ownerIndex) : null;
   }
+
   private add<T extends Task = Task> (value: T) {
     const {constructor} = value;
     this.ensure(constructor);
@@ -96,9 +111,11 @@ export default class Task extends EventEmitter {
 
     this.components.push(value);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function
   protected async onInitialize (...args: any[]) {
   }
+
   protected async initialize () {
     for (const component of this.components) {
       const {name} = component.constructor;

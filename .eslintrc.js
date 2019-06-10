@@ -31,7 +31,6 @@ module.exports = {
     "max-lines-per-function": ["error", 200],
     "max-len": ["error", 120],
     "padded-blocks": ["error", "never"],
-    "lines-between-class-members": ["error", "never"],
     "object-property-newline": "off",
     "object-curly-newline": ["error", { "multiline": true, "consistent": true }],
     "multiline-ternary": "off",

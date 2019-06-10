@@ -22,6 +22,7 @@ export default class FileOperations extends TaskWithData<FileOperationsData> {
     inputs: [],
     tsFile: __filename
   })
+
   protected async onInitialize () {
     const path = Directory.resolve(this, this.data.path);
     let buffer: Buffer = null;

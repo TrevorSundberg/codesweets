@@ -12,7 +12,9 @@ export default class GitHubAuthorization extends TaskWithData<GitHubAuthorizatio
     construct: GitHubAuthorization,
     tsFile: __filename
   })
+
   public octokit: Octokit
+
   protected async onInitialize () {
     this.octokit = new Octokit({
       auth: {

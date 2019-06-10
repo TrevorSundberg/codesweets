@@ -7,6 +7,7 @@ export default class GitClone extends Task {
     construct: GitClone,
     inputs: [GitRepository]
   })
+
   protected async onInitialize (repo: GitRepository) {
     await repo.git.clone(repo.args);
   }

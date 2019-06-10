@@ -30,11 +30,17 @@ interface TaskMetaInit {
 
 export default class TaskMeta {
   public readonly construct: Function;
+
   public readonly schema: JSONSchema6;
+
   public readonly uiSchema: any;
+
   public readonly inputs: Function[] = [];
+
   public readonly outputs: Function[] = [];
+
   public readonly validate: (data: any) => string | null;
+
   public constructor (init: TaskMetaInit) {
     this.construct = init.construct;
     if (!init.construct) {

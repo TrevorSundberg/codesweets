@@ -9,13 +9,17 @@ export default class TaskRoot extends Task {
     construct: TaskRoot,
     outputs: [Task]
   })
+
   private volume = new Volume()
+
   public get fs () {
     return this.volume;
   }
+
   public constructor () {
     super(null);
   }
+
   public initialize () {
     return super.initialize();
   }

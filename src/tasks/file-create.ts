@@ -21,6 +21,7 @@ export default class FileCreate extends TaskWithData<FileCreateData> {
     inputs: [],
     tsFile: __filename
   })
+
   protected async onInitialize () {
     const path = Directory.resolve(this, this.data.path);
     const buffer = Buffer.from(this.data.content, this.data.encoding);

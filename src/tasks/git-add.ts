@@ -13,6 +13,7 @@ export default class GitAdd extends TaskWithData<GitAddData> {
     construct: GitAdd,
     inputs: [GitRepository]
   })
+
   protected async onInitialize (repo: GitRepository) {
     await repo.git.add({...repo.args, ...this.data});
   }
