@@ -1,12 +1,9 @@
 import E2eTest from "./src/test/e2e";
 import FileCreate from "./src/tasks/file-create";
-import GitAdd from "./src/tasks/git-add";
+import GitAddCommitPush from "./src/tasks/git-add-commit-push";
 import GitClone from "./src/tasks/git-clone";
-import GitCommit from "./src/tasks/git-commit";
 import GitHubAuthorization from "./src/tasks/github-authorization";
 import GitHubCreateRepository from "./src/tasks/github-create-repository";
-import GitPush from "./src/tasks/git-push";
-// -import GitRepository from "./src/tasks/git-repository";
 import TaskRoot from "./src/core/task-root";
 
 (async () => {
@@ -24,9 +21,7 @@ import TaskRoot from "./src/core/task-root";
   new FileCreate(root, {content: "This is is a test", encoding: "utf8", path: "README.md"});
   new FileCreate(root, {content: png, encoding: "base64", path: "test.png"});
   new FileCreate(root, {content: "console.log('hello')\nconsole.log('world')", encoding: "utf8", path: "index.js"});
-  new GitAdd(root, {filepath: "."});
-  new GitCommit(root, {message: "First commit test"});
-  new GitPush(root);
+  new GitAddCommitPush(root, {add_path: ".", message: "First commit test"});
 
   await root.initialize();
 

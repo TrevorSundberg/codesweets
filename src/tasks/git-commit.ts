@@ -2,7 +2,7 @@ import GitRepository from "./git-repository";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-interface GitCommitData {
+export interface GitCommitData {
   message: string;
 }
 

@@ -2,7 +2,7 @@ import Directory from "./directory";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-interface FileOperation {
+export interface FileOperation {
   operation: "prepend" | "append" | "overwrite";
   content?: string;
 
@@ -11,7 +11,7 @@ interface FileOperation {
   find_regex?: string;
 }
 
-interface FileOperationsData {
+export interface FileOperationsData {
   path: string;
   operations?: FileOperation[];
 }

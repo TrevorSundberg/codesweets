@@ -2,7 +2,7 @@ import Octokit from "@octokit/rest";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-interface GitHubAuthorizationData {
+export interface GitHubAuthorizationData {
   username: string;
   password_or_token: string;
 }

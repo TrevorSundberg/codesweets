@@ -4,7 +4,7 @@ import GitRepository from "./git-repository";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-interface GitHubCreateRepositoryData extends DirectoryData {
+export interface GitHubCreateRepositoryData extends DirectoryData {
 
   /** The name of the repository. */
   name: string;

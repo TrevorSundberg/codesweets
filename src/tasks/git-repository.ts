@@ -2,7 +2,7 @@ import * as git from "isomorphic-git";
 import Directory, {DirectoryData} from "./directory";
 import TaskMeta from "../core/task-meta";
 
-interface GitRepositoryData extends DirectoryData {
+export interface GitRepositoryData extends DirectoryData {
   url: string;
   username?: string;
   password_or_token?: string;

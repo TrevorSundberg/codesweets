@@ -3,16 +3,16 @@ import {FLAGS} from "memfs/lib/volume";
 import TaskMeta from "../core/task-meta";
 import TaskWithData from "../core/task-with-data";
 
-type Encoding = "utf8" | "ascii" | "base64" | "hex"
+export type FileCreateEncoding = "utf8" | "ascii" | "base64" | "hex"
 
-interface FileCreateData {
+export interface FileCreateData {
   path: string;
   content: string;
   flag?: FLAGS;
   mode?: number;
 
   /** @default utf8 */
-  encoding: Encoding;
+  encoding: FileCreateEncoding;
 }
 
 export default class FileCreate extends TaskWithData<FileCreateData> {

@@ -20,6 +20,7 @@
     "src/tasks/file-create.ts",
     "src/tasks/file-operations.ts",
     "src/tasks/git-add.ts",
+    "src/tasks/git-add-commit-push.ts",
     "src/tasks/git-clone.ts",
     "src/tasks/git-commit.ts",
     "src/tasks/git-push.ts",

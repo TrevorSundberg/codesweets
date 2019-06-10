@@ -6,11 +6,6 @@ import traverse from "traverse";
 
 const ajv = new Ajv();
 
-interface TypeScriptType {
-  __filename: string;
-  typeName: string;
-}
-
 const settings: TJS.PartialArgs = {
   excludePrivate: true,
   ignoreErrors: true,
@@ -18,7 +13,7 @@ const settings: TJS.PartialArgs = {
   titles: true
 };
 
-interface TaskMetaInit {
+export interface TaskMetaInit {
   construct: Function;
   schema? : JSONSchema6;
   tsFile? : string;
