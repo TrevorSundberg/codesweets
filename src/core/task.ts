@@ -28,8 +28,19 @@ export default class Task extends EventEmitter {
     return this.root.fs;
   }
 
+  public get log (): (...args: any[]) => any {
+    return this.root.log;
+  }
+
   public constructor (owner: Task, data: any = {}) {
     super();
+
+    this.root = owner ? owner.root : this;
+    this.rawData = data;
+    this.owner = owner;
+    this.ownerIndex = owner ? owner.components.length : -1;
+
+    this.log(`${this.constructor.name} constructed`);
 
     // Perform all validation first before we do any side effects on other tasks.
     const errors = this.meta.validate(data);
@@ -37,15 +48,8 @@ export default class Task extends EventEmitter {
       throw new Error(errors);
     }
 
-    this.rawData = data;
-    this.owner = owner;
-    this.ownerIndex = owner ? owner.components.length : -1;
-
     if (owner) {
-      this.root = owner.root;
       owner.add(this);
-    } else {
-      this.root = this;
     }
   }
 
@@ -94,8 +98,12 @@ export default class Task extends EventEmitter {
     return null;
   }
 
-  public sibling<T extends Task = Task> (base: Function) {
-    return this.owner ? this.owner.has<T>(base, this.ownerIndex) : null;
+  public findAbove<T extends Task = Task> (base: Function): T {
+    if (!this.owner) {
+      return null;
+    }
+    const component = this.owner.has<T>(base, this.ownerIndex);
+    return component ? component : this.owner.findAbove<T>(base);
   }
 
   private add<T extends Task = Task> (value: T) {
@@ -116,13 +124,34 @@ export default class Task extends EventEmitter {
   protected async onInitialize (...args: any[]) {
   }
 
-  protected async initialize () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function
+  protected async onAllInitialized (...args: any[]) {
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function
+  protected async onDestroy (...args: any[]) {
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function
+  protected async onAllDestroyed (...args: any[]) {
+  }
+
+  private async walk (func: string, visitor: (component: Task) => Promise<any>) {
     for (const component of this.components) {
+      this.log(`Begin ${component.constructor.name} ${func}`);
+      await visitor(component);
+      await component.walk(func, visitor);
+      this.log(`End ${component.constructor.name} ${func}`);
+    }
+  }
+
+  private async initialize () {
+    await this.walk("initialize", async (component) => {
       const {name} = component.constructor;
       const {inputs} = component.meta;
 
       for (const input of inputs) {
-        const dependency = component.sibling(input);
+        const dependency = component.findAbove(input);
         if (!dependency) {
           throw new Error(`Missing dependency ${input.name} in task ${name}`);
         }
@@ -131,7 +160,25 @@ export default class Task extends EventEmitter {
       }
 
       await component.onInitialize(...component.dependencies);
-      await component.initialize();
-    }
+    });
+  }
+
+  private async allInitialized () {
+    await this.walk("allInitialized", (component) => component.onAllInitialized());
+  }
+
+  private async destroy () {
+    await this.walk("destroy", (component) => component.onDestroy());
+  }
+
+  private async allDestroyed () {
+    await this.walk("allDestroyed", (component) => component.onAllDestroyed());
+  }
+
+  protected async run () {
+    await this.initialize();
+    await this.allInitialized();
+    await this.destroy();
+    await this.allDestroyed();
   }
 }

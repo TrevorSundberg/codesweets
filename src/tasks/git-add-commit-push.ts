@@ -9,7 +9,7 @@ export interface GitAddCommitPushData extends GitAddData, GitCommitData {}
 
 export default class GitAddCommitPush extends TaskWithData<GitAddCommitPushData> {
   public static meta = new TaskMeta({
-    construct: GitAdd,
+    construct: GitAddCommitPush,
     inputs: [GitRepository],
     outputs: [
       GitAdd,

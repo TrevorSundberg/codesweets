@@ -65,10 +65,10 @@ export default async () => {
 
   const cat = new Cat(root, {name: "Bob", type: "tabby"});
   assert(root.components[1] === cat);
-  assert(cat.sibling<Yarn>(Yarn) === yarn);
+  assert(cat.findAbove<Yarn>(Yarn) === yarn);
   assert(cat.has<Task>(Animal) === cat);
 
-  await root.initialize();
+  await root.run();
 
   const catSchema = {
     type: "object",

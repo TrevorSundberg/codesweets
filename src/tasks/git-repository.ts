@@ -20,10 +20,15 @@ export default class GitRepository extends Directory<GitRepositoryData> {
   public get args () {
     return {
       dir: this.data.directory,
+      emitter: this,
       fs: this.fs,
       password: this.data.password_or_token,
       url: this.data.url,
       username: this.data.username
     };
+  }
+
+  protected async onInitialize () {
+    this.on("message", this.log);
   }
 }

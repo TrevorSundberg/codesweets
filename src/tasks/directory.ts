@@ -11,7 +11,7 @@ export interface DirectoryData {
 
 export default abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
   public static getWorkingDirectory (task: Task) {
-    const dir = task.sibling<Directory>(Directory);
+    const dir = task.findAbove<Directory>(Directory);
     const workingDir = dir ? path.resolve("/", dir.data.directory) : "/";
     assert(path.isAbsolute(workingDir));
     return workingDir;

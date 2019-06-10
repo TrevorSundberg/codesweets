@@ -10,17 +10,28 @@ export default class TaskRoot extends Task {
     outputs: [Task]
   })
 
-  private volume = new Volume()
+  private volume = new Volume();
+
+  private logger: (...args: any[]) => any;
 
   public get fs () {
     return this.volume;
+  }
+
+  public get log () {
+    // eslint-disable-next-line no-empty-function
+    return this.logger || (() => {});
+  }
+
+  public set log (callback: (...args: any[]) => any) {
+    this.logger = callback;
   }
 
   public constructor () {
     super(null);
   }
 
-  public initialize () {
-    return super.initialize();
+  public run () {
+    return super.run();
   }
 }

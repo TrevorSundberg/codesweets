@@ -10,6 +10,7 @@ import TaskRoot from "./src/core/task-root";
   await E2eTest;
 
   const root = new TaskRoot();
+  root.log = console.log;
 
   const png =
     "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJ0lEQVR42mP4/5/h" +
@@ -23,7 +24,7 @@ import TaskRoot from "./src/core/task-root";
   new FileCreate(root, {content: "console.log('hello')\nconsole.log('world')", encoding: "utf8", path: "index.js"});
   new GitAddCommitPush(root, {add_path: ".", message: "First commit test"});
 
-  await root.initialize();
+  await root.run();
 
   console.log(root.fs.toJSON("/"));
 

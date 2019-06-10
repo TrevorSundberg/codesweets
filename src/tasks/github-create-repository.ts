@@ -92,10 +92,10 @@ export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRep
       url,
       username: response.data.owner.login
     });
-    repo.git.init(repo.args);
-    repo.git.addRemote({
+    await repo.git.init(repo.args);
+    await repo.git.addRemote({
       ...repo.args,
-      remote: url
+      remote: "origin"
     });
   }
 }
