@@ -10,22 +10,8 @@
     "outDir": "bin"
   },
   "files": [
-    "index.ts",
-    "src/core/task-database.ts",
-    "src/core/task-meta.ts",
-    "src/core/task-root.ts",
-    "src/core/task-with-data.ts",
-    "src/core/task.ts",
-    "src/tasks/directory.ts",
-    "src/tasks/file-create.ts",
-    "src/tasks/file-operations.ts",
-    "src/tasks/git-add.ts",
-    "src/tasks/git-add-commit-push.ts",
-    "src/tasks/git-clone.ts",
-    "src/tasks/git-commit.ts",
-    "src/tasks/git-push.ts",
-    "src/tasks/git-repository.ts",
-    "src/tasks/github-authorization.ts",
-    "src/tasks/github-create-repository.ts"
-  ],
+    "sweet-pack.ts",
+    "sweet-pack-cli.ts",
+    "ts-schema.ts"
+  ]
 }

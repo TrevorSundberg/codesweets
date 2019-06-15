@@ -1,8 +1,7 @@
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import {DirectoryData} from "./directory";
 import GitHubAuthorization from "./github-authorization";
 import GitRepository from "./git-repository";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export interface GitHubCreateRepositoryData extends DirectoryData {
 
@@ -80,7 +79,7 @@ export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRep
     construct: GitHubCreateRepository,
     inputs: [GitHubAuthorization],
     outputs: [GitRepository],
-    tsFile: __filename
+    schema: require("ts-schema!./github-create-repository.ts?GitHubCreateRepositoryData")
   })
 
   protected async onInitialize (auth: GitHubAuthorization) {

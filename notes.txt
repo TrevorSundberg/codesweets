@@ -1,3 +1,68 @@
+The reason we are using webpack and not just typescript
+ - For both, we can probably invent some sort of require schema for bringing in the json
+ - However, typescript will NOT inline it which means I am unsure what happens when we run in a browser
+ - Moreover, typescript will not generate a single file
+ - Typescript will also not bundle dependencies so their code will not work
+
+We could make the schema extraction part of a webpack plugin
+
+Getting typescript to generate a single file is almost freaking impossible
+ - I really just want the json to get inlined
+ - Back to webpack it is I guess
+ - We write a webpack tool that takes an array of entrypoints
+ - We write a custom loader that loads / inlines the output json schema
+
+We really need to separate out the typescript parsing so that code doesn't need to run at runtime
+ - Avoids us needing to package the typescript compiler
+ - Make our own sweet.js that takes an array of files to compile
+ - We then generate the json files
+
+We should make webpack able to pack each task.js and module
+ - Then we use either the AST or whatever to determine who is a base class
+ - That's how we register components
+ - I think this is a pretty good architecture
+ - This way we don't need to package up typescript too
+ - Technically packing up webpack wouldn't be a bad idea...
+   - Less compute on the server
+   - But now clients can upload arbitrary JavaScript... sandboxed so who cares!
+ - We can modularize these pretty well too (lazy load or whatever)
+   - The typescript pipeline doesn't need to be loaded when we run the packed JavaScript
+ - Ultimately we can't have the scripts load the typescript files themselves
+   - Without a massively annoying packaging problem
+   - Separate client code (webpack) and server code (tsc)
+
+How do they package node_modules?
+ - They have to upload it themselves I guess
+ - Or we really do containerization for them
+
+Ok so we make a tool that packages up client tasks with typescript only
+ - Eventually we can try and port this code to the browser
+ - We'll do our json schema parsing as a plugin
+
+Seperate out the code needed to pack the typescript component vs the code needed to run
+ - How we move forward on this...
+ - Get task and all its stuff into a single library
+ - Choose a single task to compile, like Directory
+ - Make a new index whose sole purpose is packaging
+
+I don't truly need webpack to run on the client
+ - I can just run the typescript compiler
+
+What do we lose by running entirely in the browser?
+ - Lose the ability to invoke command line and shell scripts
+
+For WYSIWYG, we may want to just construct the tasks up front
+ - Basically components are required to construct a child task within their constructor
+ - Data is not validated until initialize
+ - E.g. components can set data on other components
+ - This seems like a much better model...
+ - We could entirely get rid of outputs then because we can just query what components are available after construction
+
+To avoid loading everyone's code up front, we'll have a database of the names and the files associated
+ - We only load the files if the user clicks on the component
+ - This also means we really don't know what it outputs until we add it, which is fine
+ - Unless the database records this
+
 I think we should have just one filesystem and then we write to directories within that filesystem
  - It would make copies and file systems much easier
 

@@ -28,7 +28,5 @@ import TaskRoot from "./src/core/task-root";
 
   await root.run();
 
-  console.log(root.fs.toJSON("/"));
-
   console.log(JSON.stringify(GitHubCreateRepository.meta.schema));
 })();

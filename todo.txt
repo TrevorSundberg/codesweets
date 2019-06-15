@@ -1,3 +1,6 @@
+DONE - Lets get this code running in a browser
+Make sure we can declare external libraries with the sweet packer (basically just other components)
+
 Setup webpack with React - https://www.valentinog.com/blog/babel/
 Get React JSX working with TypeScript
 Building with a build server (Travis CI)

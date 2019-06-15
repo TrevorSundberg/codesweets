@@ -1,9 +1,8 @@
 import GitAdd, {GitAddData} from "./git-add";
 import GitCommit, {GitCommitData} from "./git-commit";
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import GitPush from "./git-push";
 import GitRepository from "./git-repository";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export interface GitAddCommitPushData extends GitAddData, GitCommitData {}
 
@@ -15,7 +14,8 @@ export default class GitAddCommitPush extends TaskWithData<GitAddCommitPushData>
       GitAdd,
       GitCommit,
       GitPush
-    ]
+    ],
+    schema: require("ts-schema!./git-add-commit-push.ts?GitAddCommitPushData")
   })
 
   protected async onInitialize () {

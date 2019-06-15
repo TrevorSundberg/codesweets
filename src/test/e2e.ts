@@ -45,7 +45,7 @@ export default async () => {
         Animal,
         Hairball
       ],
-      tsFile: __filename
+      schema: require("ts-schema!./e2e.ts?CatData")
     })
 
     protected async onInitialize () {

@@ -1,6 +1,6 @@
 import * as git from "isomorphic-git";
 import Directory, {DirectoryData} from "./directory";
-import TaskMeta from "../core/task-meta";
+import {TaskMeta} from "../core/sweet";
 
 export interface GitRepositoryData extends DirectoryData {
   url: string;
@@ -12,13 +12,14 @@ export default class GitRepository extends Directory<GitRepositoryData> {
   public static meta = new TaskMeta({
     construct: GitRepository,
     outputs: [Directory],
-    tsFile: __filename
+    schema: require("ts-schema!./git-repository.ts?GitRepositoryData")
   })
 
   public git = git
 
   public get args () {
     return {
+      corsProxy: "https://cors.isomorphic-git.org",
       dir: this.data.directory,
       emitter: this,
       fs: this.fs,

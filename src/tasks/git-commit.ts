@@ -1,6 +1,5 @@
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import GitRepository from "./git-repository";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export interface GitCommitData {
   message: string;
@@ -9,7 +8,8 @@ export interface GitCommitData {
 export default class GitCommit extends TaskWithData<GitCommitData> {
   public static meta = new TaskMeta({
     construct: GitCommit,
-    inputs: [GitRepository]
+    inputs: [GitRepository],
+    schema: require("ts-schema!./git-commit.ts?GitCommitData")
   })
 
   protected async onInitialize (repo: GitRepository) {

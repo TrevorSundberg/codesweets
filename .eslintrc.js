@@ -48,6 +48,8 @@ module.exports = {
     "require-await": "off",
     "class-methods-use-this": "off",
     "@typescript-eslint/camelcase": "off",
+    "global-require": "off",
+    "callback-return": "off",
 
     "default-case": "off",
   },

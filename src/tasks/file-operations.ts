@@ -1,6 +1,5 @@
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import Directory from "./directory";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export interface FileOperation {
   operation: "prepend" | "append" | "overwrite";
@@ -20,7 +19,7 @@ export default class FileOperations extends TaskWithData<FileOperationsData> {
   public static meta = new TaskMeta({
     construct: FileOperations,
     inputs: [],
-    tsFile: __filename
+    schema: require("ts-schema!./file-operations.ts?FileOperationsData")
   })
 
   protected async onInitialize () {

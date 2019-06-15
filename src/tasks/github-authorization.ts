@@ -1,6 +1,5 @@
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import Octokit from "@octokit/rest";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export interface GitHubAuthorizationData {
   username: string;
@@ -10,7 +9,7 @@ export interface GitHubAuthorizationData {
 export default class GitHubAuthorization extends TaskWithData<GitHubAuthorizationData> {
   public static meta = new TaskMeta({
     construct: GitHubAuthorization,
-    tsFile: __filename
+    schema: require("ts-schema!./github-authorization.ts?GitHubAuthorizationData")
   })
 
   public octokit: Octokit

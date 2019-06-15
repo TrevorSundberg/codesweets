@@ -1,7 +1,6 @@
+import {TaskMeta, TaskWithData} from "../core/sweet";
 import Directory from "./directory";
 import {FLAGS} from "memfs/lib/volume";
-import TaskMeta from "../core/task-meta";
-import TaskWithData from "../core/task-with-data";
 
 export type FileCreateEncoding = "utf8" | "ascii" | "base64" | "hex"
 
@@ -19,7 +18,7 @@ export default class FileCreate extends TaskWithData<FileCreateData> {
   public static meta = new TaskMeta({
     construct: FileCreate,
     inputs: [],
-    tsFile: __filename
+    schema: require("ts-schema!./file-create.ts?FileCreateData")
   })
 
   protected async onInitialize () {

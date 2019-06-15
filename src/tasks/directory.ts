@@ -1,5 +1,4 @@
-import Task from "../core/task";
-import TaskWithData from "../core/task-with-data";
+import {Task, TaskMeta, TaskWithData} from "../core/sweet";
 import assert from "assert";
 import path from "path";
 
@@ -10,6 +9,12 @@ export interface DirectoryData {
 }
 
 export default abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
+  public static meta = new TaskMeta({
+    construct: Directory,
+    inputs: [],
+    schema: require("ts-schema!./directory.ts?DirectoryData")
+  })
+
   public static getWorkingDirectory (task: Task) {
     const dir = task.findAbove<Directory>(Directory);
     const workingDir = dir ? path.resolve("/", dir.data.directory) : "/";

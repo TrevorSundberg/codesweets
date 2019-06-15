@@ -1,22 +1,11 @@
-import * as TJS from "typescript-json-schema";
 import Ajv from "ajv";
 import {JSONSchema6} from "json-schema";
-import titleCase from "title-case";
-import traverse from "traverse";
 
 const ajv = new Ajv();
-
-const settings: TJS.PartialArgs = {
-  excludePrivate: true,
-  ignoreErrors: true,
-  required: true,
-  titles: true
-};
 
 export interface TaskMetaInit {
   construct: Function;
   schema? : JSONSchema6;
-  tsFile? : string;
   schemaTransform?: (schema: JSONSchema6) => void;
   uiSchema? : Record<string, any>;
   inputs? : Function[];
@@ -42,24 +31,7 @@ export default class TaskMeta {
       throw new Error("Parameter 'construct' is required and must " +
         "be the constructor for the class it represents");
     }
-    if (init.schema) {
-      this.schema = init.schema;
-    } else if (init.tsFile) {
-      let {tsFile} = init;
-      if (tsFile.endsWith(".js")) {
-        tsFile = tsFile.replace(".js", ".ts").replace("/bin/", "/");
-      }
-      const program = TJS.getProgramFromFiles([tsFile]);
-      const schema = TJS.generateSchema(program, `${this.construct.name}Data`, settings) as JSONSchema6;
-      traverse(schema).forEach((node) => {
-        if (node.title) {
-          node.title = titleCase(node.title);
-        }
-      });
-      this.schema = schema;
-    } else {
-      this.schema = {};
-    }
+    this.schema = init.schema || {};
 
     if (init.schemaTransform) {
       init.schemaTransform(this.schema);
