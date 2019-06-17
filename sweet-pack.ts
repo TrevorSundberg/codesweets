@@ -1,4 +1,5 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 import fs from "fs";
 import path from "path";
 import tmp from "tmp";
@@ -7,10 +8,86 @@ import webpack from "webpack";
 
 tmp.setGracefulCleanup();
 
-const mode: "development" | "production" = "development";
+type Mode = "development" | "production"
+type Entry = string | string[] | webpack.Entry
+
+const mode: Mode = process.env.NODE_ENV ? process.env.NODE_ENV as Mode : "production";
 const dist = path.resolve(__dirname, "dist");
 
-export default async (entry: string | string[] | webpack.Entry, logger = console.log) => {
+const createWebpackConfig = (entry: Entry, tsconfigPath: string): webpack.Configuration => ({
+  devtool: mode === "development" ? "source-map" : false,
+  entry,
+  mode,
+  module: {
+    rules: [
+      {
+        exclude: /node_modules|bin|dist/u,
+        loader: "ts-loader",
+        options: {
+          configFile: tsconfigPath
+        },
+        test: /\.tsx?$/u
+      }
+    ]
+  },
+  node: {
+    Buffer: true,
+    __dirname: true,
+    __filename: true,
+    child_process: "empty",
+    dns: "mock",
+    fsevents: true,
+    global: true,
+    inspector: true,
+    module: "empty",
+    net: "mock",
+    os: true,
+    process: true,
+    tls: "mock"
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          keep_classnames: true
+        }
+      })
+    ]
+  },
+  output: {
+    filename: "[name].js",
+    path: dist
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify(mode),
+        PASS: JSON.stringify(process.env.PASS),
+        USER: JSON.stringify(process.env.USER)
+      }
+    }),
+    new HtmlWebpackPlugin()
+  ],
+  resolve: {
+    alias: {
+      fs: "memfs"
+    },
+    extensions: [
+      ".tsx",
+      ".ts",
+      ".js"
+    ]
+  },
+  resolveLoader: {
+    modules: [
+      "node_modules",
+      __dirname
+    ]
+  },
+  target: "web"
+});
+
+const pack = async (entry: Entry, logger = console.log) => {
   const files: string[] = [];
   traverse(entry).forEach((val) => {
     if (typeof val === "string") {
@@ -20,8 +97,10 @@ export default async (entry: string | string[] | webpack.Entry, logger = console
 
   const tsconfig = {
     compilerOptions: {
+      baseUrl: ".",
       esModuleInterop: true,
       module: "commonjs",
+      moduleResolution: "node",
       noImplicitAny: true,
       outDir: dist,
       preserveConstEnums: true,
@@ -35,75 +114,12 @@ export default async (entry: string | string[] | webpack.Entry, logger = console
   // eslint-disable-next-line no-sync
   const tsconfigFile = tmp.fileSync({
     dir: process.cwd(),
-    postfix: ".tsconfig.json"
+    postfix: ".tsconfig.json",
+    prefix: "."
   });
-  process.once("exit", () => tsconfigFile.removeCallback());
   await fs.promises.writeFile(tsconfigFile.name, JSON.stringify(tsconfig, null, 2));
 
-  const compiler = webpack({
-    devtool: mode === "development" ? "source-map" : null,
-    entry,
-    mode,
-    module: {
-      rules: [
-        {
-          exclude: /node_modules|bin|dist/u,
-          loader: "ts-loader",
-          options: {
-            configFile: tsconfigFile.name
-          },
-          test: /\.tsx?$/u
-        }
-      ]
-    },
-    node: {
-      Buffer: true,
-      __dirname: true,
-      __filename: true,
-      child_process: "empty",
-      dns: "mock",
-      fsevents: true,
-      global: true,
-      inspector: true,
-      module: "empty",
-      net: "mock",
-      os: true,
-      process: true,
-      tls: "mock"
-    },
-    output: {
-      filename: "[name].js",
-      path: dist
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        "process.env": {
-          NODE_ENV: JSON.stringify(mode),
-          PASS: JSON.stringify(process.env.PASS),
-          USER: JSON.stringify(process.env.USER)
-        }
-      }),
-      new HtmlWebpackPlugin()
-    ],
-    resolve: {
-      alias: {
-        fs: "memfs"
-      },
-      extensions: [
-        ".tsxtsx",
-        ".ts",
-        ".js"
-      ]
-    },
-    resolveLoader: {
-      modules: [
-        "node_modules",
-        __dirname
-      ]
-    },
-    target: "web"
-  });
-
+  const compiler = webpack(createWebpackConfig(entry, tsconfigFile.name));
   return new Promise((resolve, reject) => compiler.run((err, stats) => {
     if (err) {
       reject(err);
@@ -112,3 +128,4 @@ export default async (entry: string | string[] | webpack.Entry, logger = console
     resolve(stats);
   }));
 };
+export default pack;

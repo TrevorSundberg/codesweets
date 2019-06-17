@@ -1,8 +1,9 @@
 The reason we are using webpack and not just typescript
- - For both, we can probably invent some sort of require schema for bringing in the json
+ - For both, we can probably invent some sort of require schema for bringing in the JSON Schema
  - However, typescript will NOT inline it which means I am unsure what happens when we run in a browser
  - Moreover, typescript will not generate a single file
  - Typescript will also not bundle dependencies so their code will not work
+ - Typescript also does not polyfill (fs, process, etc.)
 
 We could make the schema extraction part of a webpack plugin
 
