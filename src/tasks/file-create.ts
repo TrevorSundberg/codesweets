@@ -1,13 +1,33 @@
 import {TaskMeta, TaskWithData} from "../core/sweet";
 import Directory from "./directory";
-import {FLAGS} from "memfs/lib/volume";
+
+export declare enum FileFlags {
+  r,
+  "r+",
+  rs,
+  sr,
+  "rs+",
+  "sr+",
+  w,
+  wx,
+  xw,
+  "w+",
+  "wx+",
+  "xw+",
+  a,
+  ax,
+  xa,
+  "a+",
+  "ax+",
+  "xa+"
+}
 
 export type FileCreateEncoding = "utf8" | "ascii" | "base64" | "hex"
 
 export interface FileCreateData {
   path: string;
   content: string;
-  flag?: FLAGS;
+  flag?: FileFlags;
   mode?: number;
 
   /** @default utf8 */
