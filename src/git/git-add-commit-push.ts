@@ -1,12 +1,12 @@
-import GitAdd, {GitAddData} from "./git-add";
-import GitCommit, {GitCommitData} from "./git-commit";
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import GitPush from "./git-push";
-import GitRepository from "./git-repository";
+import {GitAdd, GitAddData} from "./git-add";
+import {GitCommit, GitCommitData} from "./git-commit";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {GitPush} from "./git-push";
+import {GitRepository} from "./git-repository";
 
 export interface GitAddCommitPushData extends GitAddData, GitCommitData {}
 
-export default class GitAddCommitPush extends TaskWithData<GitAddCommitPushData> {
+export class GitAddCommitPush extends TaskWithData<GitAddCommitPushData> {
   public static meta = new TaskMeta({
     construct: GitAddCommitPush,
     inputs: [GitRepository],

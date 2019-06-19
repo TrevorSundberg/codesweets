@@ -3,4 +3,4 @@ import sweetPack from "./sweet-pack";
 import yargs from "yargs";
 
 const {argv} = yargs.demandCommand();
-sweetPack(argv._);
+sweetPack(argv._[0], argv._.slice(1));

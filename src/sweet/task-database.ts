@@ -1,4 +1,4 @@
-import TaskMeta from "./task-meta";
+import {TaskMeta} from "./task-meta";
 
 /*
  * Enumerate possibilities for an interface
@@ -12,6 +12,6 @@ import TaskMeta from "./task-meta";
  * move forward quickly / do replacement UI instead
  */
 
-export default class TaskDatabase {
+export class TaskDatabase {
   private metas: TaskMeta[] = [];
 }

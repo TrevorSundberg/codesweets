@@ -1,5 +1,4 @@
-import {Task, TaskMeta, TaskWithData} from "../core/sweet";
-import assert from "assert";
+import {Task, TaskMeta, TaskWithData} from "../sweet/sweet";
 import path from "path";
 
 export interface DirectoryData {
@@ -8,7 +7,7 @@ export interface DirectoryData {
   directory: string;
 }
 
-export default abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
+export abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
   public static meta = new TaskMeta({
     construct: Directory,
     inputs: [],
@@ -17,9 +16,7 @@ export default abstract class Directory<T extends DirectoryData = DirectoryData>
 
   public static getWorkingDirectory (task: Task) {
     const dir = task.findAbove<Directory>(Directory);
-    const workingDir = dir ? path.resolve("/", dir.data.directory) : "/";
-    assert(path.isAbsolute(workingDir));
-    return workingDir;
+    return dir ? path.resolve("/", dir.data.directory) : "/";
   }
 
   public static resolve (task: Task, filePath: string) {

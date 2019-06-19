@@ -1,6 +1,6 @@
-import Task, {TaskData} from "./task";
+import {Task, TaskData} from "./task";
 
-export default class TaskWithData<T extends TaskData = TaskData> extends Task {
+export class TaskWithData<T extends TaskData = TaskData> extends Task {
   public get data (): T {
     return this.rawData as T;
   }

@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys */
 /* eslint-disable max-classes-per-file */
-import {Task, TaskMeta, TaskRoot, TaskWithData} from "../core/sweet";
+import {Task, TaskMeta, TaskRoot, TaskWithData} from "../sweet/sweet";
 import assert from "assert";
 
 export default async () => {
@@ -42,7 +42,7 @@ export default async () => {
         Animal,
         Hairball
       ],
-      schema: require("ts-schema!./e2e.ts?CatData")
+      schema: require("ts-schema!./test.ts?CatData")
     })
 
     protected async onInitialize () {

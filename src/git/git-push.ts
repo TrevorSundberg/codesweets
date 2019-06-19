@@ -1,7 +1,7 @@
-import {Task, TaskMeta} from "../core/sweet";
-import GitRepository from "./git-repository";
+import {Task, TaskMeta} from "../sweet/sweet";
+import {GitRepository} from "./git-repository";
 
-export default class GitPush extends Task {
+export class GitPush extends Task {
   public static meta = new TaskMeta({
     construct: GitPush,
     inputs: [GitRepository]

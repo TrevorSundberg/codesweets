@@ -12,7 +12,7 @@ export interface TaskMetaInit {
   outputs? : Function[];
 }
 
-export default class TaskMeta {
+export class TaskMeta {
   public readonly construct: Function;
 
   public readonly schema: JSONSchema6;

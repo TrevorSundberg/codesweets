@@ -1,5 +1,15 @@
 DONE - Lets get this code running in a browser
+Make it work with optimizations
+ - Maybe just try actually exporting the var and then at the bottom of the script we do the default export?
+Run all the build tasks in parallel
+Find a way to make it an error if you include another sweet packed file directly (not imported)
+
 Make sure we can declare external libraries with the sweet packer (basically just other components)
+
+We can't easily pack everything up, but we can declare externals
+ - So we can have multiple builds
+ - We can add import lines ourselves
+ - We can export default in the header
 
 Setup webpack with React - https://www.valentinog.com/blog/babel/
 Get React JSX working with TypeScript

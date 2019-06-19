@@ -1,7 +1,7 @@
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import {DirectoryData} from "./directory";
-import GitHubAuthorization from "./github-authorization";
-import GitRepository from "./git-repository";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {DirectoryData} from "../file/file";
+import {GitHubAuthorization} from "./github-authorization";
+import {GitRepository} from "../git/git";
 
 export interface GitHubCreateRepositoryData extends DirectoryData {
 
@@ -74,7 +74,7 @@ export interface GitHubCreateRepositoryData extends DirectoryData {
   allow_rebase_merge?: boolean;
 }
 
-export default class GitHubCreateRepository extends TaskWithData<GitHubCreateRepositoryData> {
+export class GitHubCreateRepository extends TaskWithData<GitHubCreateRepositoryData> {
   public static meta = new TaskMeta({
     construct: GitHubCreateRepository,
     inputs: [GitHubAuthorization],

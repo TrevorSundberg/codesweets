@@ -1,11 +1,11 @@
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import GitRepository from "./git-repository";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {GitRepository} from "./git-repository";
 
 export interface GitCommitData {
   message: string;
 }
 
-export default class GitCommit extends TaskWithData<GitCommitData> {
+export class GitCommit extends TaskWithData<GitCommitData> {
   public static meta = new TaskMeta({
     construct: GitCommit,
     inputs: [GitRepository],

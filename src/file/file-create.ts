@@ -1,5 +1,5 @@
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import Directory from "./directory";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {Directory} from "./directory";
 
 export declare enum FileFlags {
   r,
@@ -34,7 +34,7 @@ export interface FileCreateData {
   encoding: FileCreateEncoding;
 }
 
-export default class FileCreate extends TaskWithData<FileCreateData> {
+export class FileCreate extends TaskWithData<FileCreateData> {
   public static meta = new TaskMeta({
     construct: FileCreate,
     inputs: [],

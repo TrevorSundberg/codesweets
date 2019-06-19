@@ -1,5 +1,5 @@
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import Directory from "./directory";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {Directory} from "./directory";
 
 export interface FileOperation {
   operation: "prepend" | "append" | "overwrite";
@@ -15,7 +15,7 @@ export interface FileOperationsData {
   operations?: FileOperation[];
 }
 
-export default class FileOperations extends TaskWithData<FileOperationsData> {
+export class FileOperations extends TaskWithData<FileOperationsData> {
   public static meta = new TaskMeta({
     construct: FileOperations,
     inputs: [],

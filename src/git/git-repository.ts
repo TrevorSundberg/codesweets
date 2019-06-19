@@ -1,6 +1,6 @@
 import * as git from "isomorphic-git";
-import Directory, {DirectoryData} from "./directory";
-import {TaskMeta} from "../core/sweet";
+import {Directory, DirectoryData} from "../file/file";
+import {TaskMeta} from "../sweet/sweet";
 
 export interface GitRepositoryData extends DirectoryData {
   url: string;
@@ -8,7 +8,7 @@ export interface GitRepositoryData extends DirectoryData {
   password_or_token?: string;
 }
 
-export default class GitRepository extends Directory<GitRepositoryData> {
+export class GitRepository extends Directory<GitRepositoryData> {
   public static meta = new TaskMeta({
     construct: GitRepository,
     outputs: [Directory],

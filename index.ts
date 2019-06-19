@@ -1,13 +1,11 @@
-import E2eTest from "./src/test/e2e";
-import FileCreate from "./src/tasks/file-create";
-import GitAddCommitPush from "./src/tasks/git-add-commit-push";
-import GitClone from "./src/tasks/git-clone";
-import GitHubAuthorization from "./src/tasks/github-authorization";
-import GitHubCreateRepository from "./src/tasks/github-create-repository";
-import {TaskRoot} from "./src/core/sweet";
+import {GitAddCommitPush, GitClone} from "./src/git/git";
+import {GitHubAuthorization, GitHubCreateRepository} from "./src/github/github";
+import {FileCreate} from "./src/file/file";
+import {TaskRoot} from "./src/sweet/sweet";
+import Test from "./src/test/test";
 
 (async () => {
-  await E2eTest;
+  await Test;
 
   const root = new TaskRoot();
   root.log = console.log;

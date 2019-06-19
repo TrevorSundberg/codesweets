@@ -4,7 +4,9 @@
   "description": "Tools to automatically setup an environment for multiple languages.",
   "main": "index.js",
   "scripts": {
-    "build": "eslint --ext .ts . && rm -rf ./bin && tsc && node ./bin/sweet-pack-cli.js ./index.ts",
+    "build": "./build-sweet-pack.sh && ./build-tasks.sh",
+    "build-sweet-pack": "./build-sweet-pack.sh",
+    "build-tasks": "./build-tasks.sh",
     "start": "npm run build"
   },
   "author": "Trevor Sundberg",

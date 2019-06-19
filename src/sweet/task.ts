@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import TaskMeta from "./task-meta";
+import {TaskMeta} from "./task-meta";
 
 process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
@@ -12,7 +12,7 @@ export interface TaskSaved {
   components?: TaskSaved[];
 }
 
-export default class Task extends EventEmitter {
+export class Task extends EventEmitter {
   public static meta = new TaskMeta({
     construct: Task,
     outputs: [Task]

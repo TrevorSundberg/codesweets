@@ -1,5 +1,5 @@
-import {TaskMeta, TaskWithData} from "../core/sweet";
-import GitRepository from "./git-repository";
+import {TaskMeta, TaskWithData} from "../sweet/sweet";
+import {GitRepository} from "./git-repository";
 
 export interface GitAddData {
 
@@ -7,7 +7,7 @@ export interface GitAddData {
   add_path: string;
 }
 
-export default class GitAdd extends TaskWithData<GitAddData> {
+export class GitAdd extends TaskWithData<GitAddData> {
   public static meta = new TaskMeta({
     construct: GitAdd,
     inputs: [GitRepository],
