@@ -75,11 +75,12 @@ export interface GitHubCreateRepositoryData extends DirectoryData {
 }
 
 export class GitHubCreateRepository extends TaskWithData<GitHubCreateRepositoryData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitHubCreateRepository,
     inputs: [GitHubAuthorization],
     outputs: [GitRepository],
-    schema: require("ts-schema!./github-create-repository.ts?GitHubCreateRepositoryData")
+    schema: require("ts-schema!./github-create-repository.ts?GitHubCreateRepositoryData"),
+    typename: "GitHubCreateRepository"
   })
 
   protected async onInitialize (auth: GitHubAuthorization) {

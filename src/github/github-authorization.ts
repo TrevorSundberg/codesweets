@@ -7,9 +7,10 @@ export interface GitHubAuthorizationData {
 }
 
 export class GitHubAuthorization extends TaskWithData<GitHubAuthorizationData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitHubAuthorization,
-    schema: require("ts-schema!./github-authorization.ts?GitHubAuthorizationData")
+    schema: require("ts-schema!./github-authorization.ts?GitHubAuthorizationData"),
+    typename: "GitHubAuthorization"
   })
 
   public octokit: Octokit

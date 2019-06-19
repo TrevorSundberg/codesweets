@@ -7,7 +7,7 @@ import {GitRepository} from "./git-repository";
 export interface GitAddCommitPushData extends GitAddData, GitCommitData {}
 
 export class GitAddCommitPush extends TaskWithData<GitAddCommitPushData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitAddCommitPush,
     inputs: [GitRepository],
     outputs: [
@@ -15,7 +15,8 @@ export class GitAddCommitPush extends TaskWithData<GitAddCommitPushData> {
       GitCommit,
       GitPush
     ],
-    schema: require("ts-schema!./git-add-commit-push.ts?GitAddCommitPushData")
+    schema: require("ts-schema!./git-add-commit-push.ts?GitAddCommitPushData"),
+    typename: "GitAddCommitPush"
   })
 
   protected async onInitialize () {

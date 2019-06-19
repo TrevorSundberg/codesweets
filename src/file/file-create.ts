@@ -35,10 +35,11 @@ export interface FileCreateData {
 }
 
 export class FileCreate extends TaskWithData<FileCreateData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: FileCreate,
     inputs: [],
-    schema: require("ts-schema!./file-create.ts?FileCreateData")
+    schema: require("ts-schema!./file-create.ts?FileCreateData"),
+    typename: "FileCreate"
   })
 
   protected async onInitialize () {

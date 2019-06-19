@@ -8,10 +8,11 @@ export interface GitAddData {
 }
 
 export class GitAdd extends TaskWithData<GitAddData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitAdd,
     inputs: [GitRepository],
-    schema: require("ts-schema!./git-add.ts?GitAddData")
+    schema: require("ts-schema!./git-add.ts?GitAddData"),
+    typename: "GitAdd"
   })
 
   protected async onInitialize (repo: GitRepository) {

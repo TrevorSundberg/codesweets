@@ -2,9 +2,10 @@ import {Task, TaskMeta} from "../sweet/sweet";
 import {GitRepository} from "./git-repository";
 
 export class GitClone extends Task {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitClone,
-    inputs: [GitRepository]
+    inputs: [GitRepository],
+    typename: "GitClone"
   })
 
   protected async onInitialize (repo: GitRepository) {

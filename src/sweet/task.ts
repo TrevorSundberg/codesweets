@@ -13,9 +13,10 @@ export interface TaskSaved {
 }
 
 export class Task extends EventEmitter {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: Task,
-    outputs: [Task]
+    outputs: [Task],
+    typename: "Task"
   })
 
   public readonly root: Task;
@@ -50,7 +51,7 @@ export class Task extends EventEmitter {
     this.owner = owner;
     this.ownerIndex = owner ? owner.components.length : -1;
 
-    this.log(`${this.constructor.name} constructed`);
+    this.log(`${this.meta.typename} constructed`);
 
     // Perform all validation first before we do any side effects on other tasks.
     const errors = this.meta.validate(data);
@@ -67,7 +68,7 @@ export class Task extends EventEmitter {
     const {meta} = this.constructor as any;
     if (this.constructor !== meta.construct) {
       throw new Error("Invalid TaskMeta, be sure to use: " +
-        `static meta : TaskMeta = new TaskMeta(${this.constructor.name}, ...)`);
+        "static meta : TaskMeta = new TaskMeta(...)");
     }
     return meta;
   }
@@ -81,7 +82,7 @@ export class Task extends EventEmitter {
       throw Error(`Only serialize a task when constructed (task was '${this.phase}')`);
     }
     const result: TaskSaved = {
-      typename: this.constructor.name
+      typename: this.meta.typename
     };
     if (Object.values(this.rawData).length !== 0) {
       result.data = this.rawData;
@@ -103,9 +104,9 @@ export class Task extends EventEmitter {
     return false;
   }
 
-  private ensure (type: Function): void {
-    if (!this.meta.outputs.find((func) => Task.isA(type, func))) {
-      throw new Error(`${type.name} is not an output of ${this.constructor.name}`);
+  private ensure (meta: TaskMeta): void {
+    if (!this.meta.outputs.find((func) => Task.isA(meta.construct, func))) {
+      throw new Error(`${meta.typename} is not an output of ${this.meta.typename}`);
     }
   }
 
@@ -137,13 +138,12 @@ export class Task extends EventEmitter {
   }
 
   private add<T extends Task = Task> (value: T) {
-    const {constructor} = value;
-    this.ensure(constructor);
+    this.ensure(value.meta);
 
     /*
      * Singleton enforcement...
      *if (this.has(constructor)) {
-     *  throw new Error(`${constructor.name} already exists within task ${this.constructor.name}`);
+     *  throw new Error(`${value.meta.typename} already exists within task ${this.meta.typename}`);
      *}
      */
 
@@ -168,22 +168,21 @@ export class Task extends EventEmitter {
 
   private async walk (func: string, visitor: (component: Task) => Promise<any>) {
     for (const component of this.components) {
-      this.log(`Begin ${component.constructor.name} ${func}`);
+      this.log(`Begin ${component.meta.typename} ${func}`);
       await visitor(component);
       await component.walk(func, visitor);
-      this.log(`End ${component.constructor.name} ${func}`);
+      this.log(`End ${component.meta.typename} ${func}`);
     }
   }
 
   private async initialize () {
     await this.walk("initialize", async (component) => {
-      const {name} = component.constructor;
-      const {inputs} = component.meta;
+      const {inputs, typename} = component.meta;
 
       for (const input of inputs) {
         const dependency = component.findAbove(input);
         if (!dependency) {
-          throw new Error(`Missing dependency ${input.name} in task ${name}`);
+          throw new Error(`Missing dependency ${input.meta.typename} in task ${typename}`);
         }
         component.dependencies.push(dependency);
         dependency.dependents.push(this);

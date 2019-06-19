@@ -3,29 +3,35 @@ import {JSONSchema6} from "json-schema";
 
 const ajv = new Ajv();
 
+export type TaskConstructor = Function & { meta: TaskMeta }
+
 export interface TaskMetaInit {
-  construct: Function;
+  typename: string;
+  construct: TaskConstructor;
   schema? : JSONSchema6;
   schemaTransform?: (schema: JSONSchema6) => void;
   uiSchema? : Record<string, any>;
-  inputs? : Function[];
-  outputs? : Function[];
+  inputs? : TaskConstructor[];
+  outputs? : TaskConstructor[];
 }
 
 export class TaskMeta {
-  public readonly construct: Function;
+  public readonly typename: string;
+
+  public readonly construct: TaskConstructor;
 
   public readonly schema: JSONSchema6;
 
   public readonly uiSchema: any;
 
-  public readonly inputs: Function[] = [];
+  public readonly inputs: TaskConstructor[] = [];
 
-  public readonly outputs: Function[] = [];
+  public readonly outputs: TaskConstructor[] = [];
 
   public readonly validate: (data: any) => string | null;
 
   public constructor (init: TaskMetaInit) {
+    this.typename = init.typename;
     this.construct = init.construct;
     if (!init.construct) {
       throw new Error("Parameter 'construct' is required and must " +

@@ -8,10 +8,11 @@ export interface DirectoryData {
 }
 
 export abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: Directory,
     inputs: [],
-    schema: require("ts-schema!./directory.ts?DirectoryData")
+    schema: require("ts-schema!./directory.ts?DirectoryData"),
+    typename: "Directory"
   })
 
   public static getWorkingDirectory (task: Task) {

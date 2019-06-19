@@ -9,10 +9,11 @@ export interface GitRepositoryData extends DirectoryData {
 }
 
 export class GitRepository extends Directory<GitRepositoryData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitRepository,
     outputs: [Directory],
-    schema: require("ts-schema!./git-repository.ts?GitRepositoryData")
+    schema: require("ts-schema!./git-repository.ts?GitRepositoryData"),
+    typename: "GitRepository"
   })
 
   public git = git

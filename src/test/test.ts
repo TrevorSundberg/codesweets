@@ -17,15 +17,15 @@ export default async () => {
   };
 
   class Yarn extends Task {
-    public static meta = new TaskMeta({construct: Yarn})
+    public static meta: TaskMeta = new TaskMeta({construct: Yarn, typename: "Yarn"})
   }
 
   class Hairball extends Task {
-    public static meta = new TaskMeta({construct: Hairball})
+    public static meta: TaskMeta = new TaskMeta({construct: Hairball, typename: "Hairball"})
   }
 
   class Animal<T> extends TaskWithData<T> {
-    public static meta = new TaskMeta({construct: Animal})
+    public static meta: TaskMeta = new TaskMeta({construct: Animal, typename: "Animal"})
   }
 
   interface CatData {
@@ -35,14 +35,15 @@ export default async () => {
   }
 
   class Cat extends Animal<CatData> {
-    public static meta = new TaskMeta({
+    public static meta: TaskMeta = new TaskMeta({
       construct: Cat,
       inputs: [Yarn],
       outputs: [
         Animal,
         Hairball
       ],
-      schema: require("ts-schema!./test.ts?CatData")
+      schema: require("ts-schema!./test.ts?CatData"),
+      typename: "Cat"
     })
 
     protected async onInitialize () {

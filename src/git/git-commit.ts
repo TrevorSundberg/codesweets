@@ -6,10 +6,11 @@ export interface GitCommitData {
 }
 
 export class GitCommit extends TaskWithData<GitCommitData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: GitCommit,
     inputs: [GitRepository],
-    schema: require("ts-schema!./git-commit.ts?GitCommitData")
+    schema: require("ts-schema!./git-commit.ts?GitCommitData"),
+    typename: "GitCommit"
   })
 
   protected async onInitialize (repo: GitRepository) {

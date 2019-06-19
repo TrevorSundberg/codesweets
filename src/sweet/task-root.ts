@@ -5,9 +5,10 @@ process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
 
 export class TaskRoot extends Task {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: TaskRoot,
-    outputs: [Task]
+    outputs: [Task],
+    typename: "TaskRoot"
   })
 
   private volume = new Volume();

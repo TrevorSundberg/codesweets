@@ -1,3 +1,8 @@
+Function.name is not reliable even with setting not to mangle function names
+ - In some cases it adds the namespaces/module/filename to the class name
+ - Might be easier if we just make it called like 'type' or something
+ - Throw an error if we don't find type (make a get type name function)
+
 The reason we are using webpack and not just typescript
  - For both, we can probably invent some sort of require schema for bringing in the JSON Schema
  - However, typescript will NOT inline it which means I am unsure what happens when we run in a browser

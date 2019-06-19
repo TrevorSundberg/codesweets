@@ -12,6 +12,7 @@
   "files": [
     "sweet-pack.ts",
     "sweet-pack-cli.ts",
-    "ts-schema.ts"
+    "ts-schema.ts",
+    "index.ts"
   ]
 }

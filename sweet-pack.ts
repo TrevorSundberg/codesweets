@@ -1,5 +1,4 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import TerserPlugin from "terser-webpack-plugin";
 import fs from "fs";
 import path from "path";
 import tmp from "tmp";
@@ -84,15 +83,6 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
       os: true,
       process: true,
       tls: "mock"
-    },
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            keep_classnames: true
-          }
-        })
-      ]
     },
     output: {
       filename: `${name}.js`,

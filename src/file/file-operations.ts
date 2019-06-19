@@ -16,10 +16,11 @@ export interface FileOperationsData {
 }
 
 export class FileOperations extends TaskWithData<FileOperationsData> {
-  public static meta = new TaskMeta({
+  public static meta: TaskMeta = new TaskMeta({
     construct: FileOperations,
     inputs: [],
-    schema: require("ts-schema!./file-operations.ts?FileOperationsData")
+    schema: require("ts-schema!./file-operations.ts?FileOperationsData"),
+    typename: "FileOperations"
   })
 
   protected async onInitialize () {
