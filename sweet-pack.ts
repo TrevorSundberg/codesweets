@@ -1,4 +1,3 @@
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import fs from "fs";
 import path from "path";
 import tmp from "tmp";
@@ -11,15 +10,18 @@ type Mode = "development" | "production"
 const mode: Mode = process.env.NODE_ENV ? process.env.NODE_ENV as Mode : "production";
 const dist = path.resolve("dist");
 
-const pack = async (file: string, externalLibraries: string[], logger = console.log) => {
-  const extern = externalLibraries.map((lib) => {
-    const split = lib.split(":");
-    if (split.length === 1) {
-      return {name: lib, path: lib};
-    }
-    return {name: split[0], path: split[1]};
-  });
+export type Logger = (...args: any[]) => any
 
+export interface Dependencies { [name: string]: string }
+
+export interface Config {
+  entry: {
+    [file: string]: Dependencies;
+  };
+  logger: (...args: any[]) => any;
+}
+
+const packSingle = async (file: string, deps: Dependencies) => {
   const {name} = path.parse(file);
   const tsconfig = {
     compilerOptions: {
@@ -46,8 +48,10 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
   await fs.promises.writeFile(tsconfigFile.name, JSON.stringify(tsconfig, null, 2));
 
   const externals: webpack.ExternalsObjectElement = {};
-  for (const lib of extern) {
-    externals[lib.path] = `__imports[${JSON.stringify(lib.name)}]`;
+  const dependencies = Object.entries(deps).map((pair) => ({name: pair[0], path: pair[1]}));
+
+  for (const dep of dependencies) {
+    externals[dep.path] = `__imports[${JSON.stringify(dep.name)}]`;
   }
 
   const compiler = webpack({
@@ -97,8 +101,7 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
           PASS: JSON.stringify(process.env.PASS),
           USER: JSON.stringify(process.env.USER)
         }
-      }),
-      new HtmlWebpackPlugin()
+      })
     ],
     resolve: {
       alias: {
@@ -124,14 +127,13 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
       reject(err);
       return;
     }
-    logger(stats.toString());
     resolve(stats);
   }));
 
   let final = "var __imports = {}\n";
-  final += extern.map((lib, index) => "" +
-    `import __import${index} from ${JSON.stringify(`./${lib.name}.js`)};\n` +
-    `__imports[${JSON.stringify(lib.name)}] = __import${index};\n`).join("");
+  final += dependencies.map((dep, index) => "" +
+    `import __import${index} from ${JSON.stringify(`./${dep.name}.js`)};\n` +
+    `__imports[${JSON.stringify(dep.name)}] = __import${index};\n`).join("");
   const jsPath = path.join(dist, `${name}.js`);
   final += await fs.promises.readFile(jsPath, "utf8");
   final += `\nexport default ${name};`;
@@ -139,4 +141,12 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
   await fs.promises.writeFile(jsPath, final, "utf8");
   return result;
 };
-export default pack;
+
+export default async (config: Config) => {
+  const logger = config.logger || console.log;
+  const results = await Promise.all(Object.entries(config.entry).map((pair) => packSingle(pair[0], pair[1])));
+  results.forEach((result) => {
+    logger(`\n${"-".repeat(80)}`);
+    logger(result.toString());
+  });
+};

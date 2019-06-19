@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+import path from "path";
 import sweetPack from "./sweet-pack";
 import yargs from "yargs";
 
-const {argv} = yargs.demandCommand();
-sweetPack(argv._[0], argv._.slice(1));
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const config = require(yargs.argv.config as string || path.resolve("./sweet.config.js"));
+sweetPack(config as any);
