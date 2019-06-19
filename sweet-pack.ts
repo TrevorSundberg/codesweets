@@ -95,7 +95,8 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
       ]
     },
     output: {
-      filename: "[name].js",
+      filename: `${name}.js`,
+      library: name,
       libraryTarget: "var",
       path: dist
     },
@@ -141,9 +142,9 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
   final += extern.map((lib, index) => "" +
     `import __import${index} from ${JSON.stringify(`./${lib.name}.js`)};\n` +
     `__imports[${JSON.stringify(lib.name)}] = __import${index};\n`).join("");
-  final += "export default ";
   const jsPath = path.join(dist, `${name}.js`);
   final += await fs.promises.readFile(jsPath, "utf8");
+  final += `\nexport default ${name};`;
 
   await fs.promises.writeFile(jsPath, final, "utf8");
   return result;
