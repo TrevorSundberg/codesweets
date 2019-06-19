@@ -40,7 +40,7 @@ const pack = async (file: string, externalLibraries: string[], logger = console.
   // eslint-disable-next-line no-sync
   const tsconfigFile = tmp.fileSync({
     dir: process.cwd(),
-    postfix: ".tsconfig.json",
+    postfix: ".sweet-pack-tsconfig.json",
     prefix: "."
   });
   await fs.promises.writeFile(tsconfigFile.name, JSON.stringify(tsconfig, null, 2));
