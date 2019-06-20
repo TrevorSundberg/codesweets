@@ -2,6 +2,8 @@ DONE - Lets get this code running in a browser
 DONE - Make it work with optimizations
 DONE - Maybe just try actually exporting the var and then at the bottom of the script we do the default export?
 
+Get wepback to export typescript types file along with js (sweet pack)
+
 Setup a react page where we can see the json schema UI for one component
  - Can remove the USER/PASS stuff
  - Then make it work for a pre-setup version of a bunch of components
