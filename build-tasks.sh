@@ -1,4 +1,4 @@
 set -e
 eslint --ext .ts .
-rm -rf ./dist
-node ./bin/sweet-pack-cli.js
+rm -rf ./bin/tasks
+node ./bin/sweet-pack/sweet-pack-cli.js

@@ -24,5 +24,6 @@ module.exports = {
       git: "./src/git/git",
       github: "./src/github/github"
     }
-  }
+  },
+  outDir: "bin/tasks"
 };

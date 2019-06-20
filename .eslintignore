@@ -1,4 +1,3 @@
 node_modules
 bin
-dist
 *.sweet-pack-tsconfig.json

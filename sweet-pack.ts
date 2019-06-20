@@ -6,9 +6,7 @@ import webpack from "webpack";
 tmp.setGracefulCleanup();
 
 type Mode = "development" | "production"
-
 const mode: Mode = process.env.NODE_ENV ? process.env.NODE_ENV as Mode : "production";
-const dist = path.resolve("dist");
 
 export type Logger = (...args: any[]) => any
 
@@ -19,9 +17,10 @@ export interface Config {
     [file: string]: Dependencies;
   };
   logger: (...args: any[]) => any;
+  outDir: string;
 }
 
-const packSingle = async (file: string, deps: Dependencies) => {
+const packSingle = async (file: string, outDir: string, deps: Dependencies) => {
   const {name} = path.parse(file);
   const tsconfig = {
     compilerOptions: {
@@ -30,7 +29,7 @@ const packSingle = async (file: string, deps: Dependencies) => {
       module: "esnext",
       moduleResolution: "node",
       noImplicitAny: true,
-      outDir: dist,
+      outDir,
       preserveConstEnums: true,
       removeComments: false,
       sourceMap: true,
@@ -92,7 +91,7 @@ const packSingle = async (file: string, deps: Dependencies) => {
       filename: `${name}.js`,
       library: name,
       libraryTarget: "var",
-      path: dist
+      path: outDir
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -134,7 +133,7 @@ const packSingle = async (file: string, deps: Dependencies) => {
   final += dependencies.map((dep, index) => "" +
     `import __import${index} from ${JSON.stringify(`./${dep.name}.js`)};\n` +
     `__imports[${JSON.stringify(dep.name)}] = __import${index};\n`).join("");
-  const jsPath = path.join(dist, `${name}.js`);
+  const jsPath = path.join(outDir, `${name}.js`);
   final += await fs.promises.readFile(jsPath, "utf8");
   final += `\nexport default ${name};`;
 
@@ -144,7 +143,8 @@ const packSingle = async (file: string, deps: Dependencies) => {
 
 export default async (config: Config) => {
   const logger = config.logger || console.log;
-  const results = await Promise.all(Object.entries(config.entry).map((pair) => packSingle(pair[0], pair[1])));
+  const outDir = path.resolve(config.outDir || "dist");
+  const results = await Promise.all(Object.entries(config.entry).map((pair) => packSingle(pair[0], outDir, pair[1])));
   results.forEach((result) => {
     logger(`\n${"-".repeat(80)}`);
     logger(result.toString());

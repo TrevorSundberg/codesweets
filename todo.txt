@@ -3,6 +3,7 @@ DONE - Make it work with optimizations
 DONE - Maybe just try actually exporting the var and then at the bottom of the script we do the default export?
 
 Setup a react page where we can see the json schema UI for one component
+ - Can remove the USER/PASS stuff
  - Then make it work for a pre-setup version of a bunch of components
  - Then make components addable/removable
 
