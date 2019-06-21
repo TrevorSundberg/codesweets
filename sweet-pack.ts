@@ -1,7 +1,11 @@
+import dir from "node-dir";
 import fs from "fs";
 import path from "path";
 import tmp from "tmp";
 import webpack from "webpack";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const dts = require("dts-bundle");
 
 tmp.setGracefulCleanup();
 
@@ -20,11 +24,15 @@ export interface Config {
   outDir: string;
 }
 
-const packSingle = async (file: string, outDir: string, deps: Dependencies) => {
+const packSingle = async (file: string, outDirectory: string, deps: Dependencies) => {
   const {name} = path.parse(file);
+  const outDir = path.join(outDirectory, name);
+  const declarationDir = path.join(outDir, "declarations");
   const tsconfig = {
     compilerOptions: {
       baseUrl: ".",
+      declaration: true,
+      declarationDir,
       esModuleInterop: true,
       module: "esnext",
       moduleResolution: "node",
@@ -131,13 +139,27 @@ const packSingle = async (file: string, outDir: string, deps: Dependencies) => {
 
   let final = "var __imports = {}\n";
   final += dependencies.map((dep, index) => "" +
-    `import __import${index} from ${JSON.stringify(`./${dep.name}.js`)};\n` +
+    `import __import${index} from ${JSON.stringify(`../${dep.name}/${dep.name}.js`)};\n` +
     `__imports[${JSON.stringify(dep.name)}] = __import${index};\n`).join("");
   const jsPath = path.join(outDir, `${name}.js`);
   final += await fs.promises.readFile(jsPath, "utf8");
   final += `\nexport default ${name};`;
 
   await fs.promises.writeFile(jsPath, final, "utf8");
+
+  const declFiles = dir.files(declarationDir, {sync: true});
+  const declFileName = `${name}.d.ts`;
+  const baseDeclFile = declFiles.find((declFile) => path.basename(declFile) === declFileName);
+  if (baseDeclFile) {
+    dts.bundle({
+      baseDir: declarationDir,
+      main: baseDeclFile,
+      name,
+      out: path.join(outDir, declFileName),
+      outputAsModuleFolder: true
+    });
+  }
+
   return result;
 };
 
