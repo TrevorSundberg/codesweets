@@ -17,8 +17,8 @@ const loadJS = (url: string): Promise<any> => eval(`import(${JSON.stringify(url)
 const log = (type: any) => console.log.bind(console, type);
 
 
-const typeNames: string[] = [];
-const oneOf: JSONSchema6[] = [];
+const taskNames: string[] = [];
+const taskSchemas: JSONSchema6[] = [];
 
 const schema: JSONSchema6 = {
   definitions: {},
@@ -27,12 +27,12 @@ const schema: JSONSchema6 = {
       items: {
         dependencies: {
           typename: {
-            oneOf
+            oneOf: taskSchemas
           }
         },
         properties: {
           typename: {
-            enum: typeNames,
+            enum: taskNames,
             title: "Task",
             type: "string"
           }
@@ -53,7 +53,7 @@ globals.ontaskmeta = (meta: TaskMeta) => {
     return;
   }
   schema.definitions[meta.typename] = meta.schema;
-  typeNames.push(meta.typename);
+  taskNames.push(meta.typename);
   const componentSchema: JSONSchema6 = {
     properties: {
       data: meta.schema,
@@ -62,7 +62,7 @@ globals.ontaskmeta = (meta: TaskMeta) => {
       }
     }
   };
-  oneOf.push(componentSchema);
+  taskSchemas.push(componentSchema);
 
   console.log(meta.typename, JSON.stringify(meta.schema));
 };

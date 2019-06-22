@@ -42,8 +42,11 @@ export class TaskMeta extends EventEmitter {
       throw new Error("Parameter 'construct' is required and must " +
         "be the constructor for the class it represents");
     }
+
+    if (init.schema && !init.schema.title) {
+      init.schema.title = "";
+    }
     this.schema = init.schema || {};
-    this.schema.title = "";
 
     if (init.schemaTransform) {
       init.schemaTransform(this.schema);
