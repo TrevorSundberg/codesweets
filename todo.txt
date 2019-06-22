@@ -8,14 +8,17 @@ DONE - I want to abuse the array UI beacuse it has everything (nesting, etc)
 DONE - Components register themselves rather than us relying on scanning exports
 DONE - Schema generator doesn't recursively pull in definitions
 DONE - Fix / patch memfs to not warn and not have the process issue
+DONE - Make components addable/removable
+
+Fix buttons / style / theme (make it reasonable)
+
+Submitting should run the components
 
 Custom UI for the components dropdown that lists all components from a database and loads them upon clicking
 
 Remove webpack size limitation warnings (at least in sweetpack)
 
- - Remove the USER/PASS stuff
- - Then make it work for a pre-setup version of a bunch of components
- - Then make components addable/removable
+Remove the USER/PASS stuff
 
 Make a schema we can validate for TaskSaved
 
