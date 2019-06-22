@@ -3,7 +3,7 @@ import {GitRepository} from "./git-repository";
 
 export interface GitAddData {
 
-  /** @default: '.' */
+  /** @default: "." */
   add_path: string;
 }
 

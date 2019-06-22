@@ -5,7 +5,7 @@ export interface FileOperation {
   operation: "prepend" | "append" | "overwrite";
   content?: string;
 
-  /** @default utf8 */
+  /** @default "utf8" */
   encoding?: BufferEncoding;
   find_regex?: string;
 }

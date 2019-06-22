@@ -7,8 +7,8 @@ export interface FileCreateData {
   path: string;
   content: string;
 
-  /** @default utf8 */
-  encoding: FileCreateEncoding;
+  /** @default "utf8" */
+  encoding?: FileCreateEncoding;
 }
 
 export class FileCreate extends TaskWithData<FileCreateData> {
