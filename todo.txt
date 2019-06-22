@@ -5,6 +5,12 @@ DONE - Get wepback to export typescript types file along with js (sweet pack)
 DONE - Setup a react page where we can see the json schema UI for one component
 DONE - Run all the build tasks in parallel
 DONE - I want to abuse the array UI beacuse it has everything (nesting, etc)
+DONE - Components register themselves rather than us relying on scanning exports
+DONE - Schema generator doesn't recursively pull in definitions
+
+Switch to another filesystem that doesn't have errors (memfs)
+
+Custom UI for the components dropdown that lists all components from a database and loads them upon clicking
 
  - Remove the USER/PASS stuff
  - Then make it work for a pre-setup version of a bunch of components
