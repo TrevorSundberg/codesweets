@@ -13,6 +13,7 @@ export interface TaskSaved {
 export class Task extends EventEmitter {
   public static meta: TaskMeta = new TaskMeta({
     construct: Task,
+    hidden: true,
     outputs: [Task],
     typename: "Task"
   })

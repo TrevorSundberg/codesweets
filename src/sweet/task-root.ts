@@ -5,6 +5,7 @@ import {Volume} from "memfs";
 export class TaskRoot extends Task {
   public static meta: TaskMeta = new TaskMeta({
     construct: TaskRoot,
+    hidden: true,
     outputs: [Task],
     typename: "TaskRoot"
   })

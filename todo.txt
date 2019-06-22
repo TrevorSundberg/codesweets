@@ -9,6 +9,7 @@ DONE - Components register themselves rather than us relying on scanning exports
 DONE - Schema generator doesn't recursively pull in definitions
 DONE - Fix / patch memfs to not warn and not have the process issue
 DONE - Make components addable/removable
+DONE - Make certain components hidden (not addable)
 
 Fix buttons / style / theme (make it reasonable)
 

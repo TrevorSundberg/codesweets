@@ -47,6 +47,9 @@ const schema: JSONSchema6 = {
 
 const globals: any = window || global;
 globals.ontaskmeta = (meta: TaskMeta) => {
+  if (meta.hidden) {
+    return;
+  }
   schema.definitions[meta.typename] = meta.schema;
   typeNames.push(meta.typename);
   const componentSchema: JSONSchema6 = {

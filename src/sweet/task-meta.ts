@@ -14,6 +14,7 @@ export interface TaskMetaInit {
   uiSchema? : Record<string, any>;
   inputs? : TaskConstructor[];
   outputs? : TaskConstructor[];
+  hidden? : boolean;
 }
 
 export class TaskMeta extends EventEmitter {
@@ -30,6 +31,8 @@ export class TaskMeta extends EventEmitter {
   public readonly outputs: TaskConstructor[] = [];
 
   public readonly validate: (data: any) => string | null;
+
+  public readonly hidden: boolean;
 
   public constructor (init: TaskMetaInit) {
     super();
@@ -50,6 +53,7 @@ export class TaskMeta extends EventEmitter {
     this.outputs = init.outputs || [];
     const ajvValidate = ajv.compile(this.schema);
     this.validate = (data) => ajvValidate(data) ? null : ajv.errorsText(ajvValidate.errors);
+    this.hidden = init.hidden;
 
     const globals: any = window || global;
     if (globals.ontaskmeta) {
