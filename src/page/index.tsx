@@ -33,12 +33,14 @@ const schema: JSONSchema6 = {
         properties: {
           typename: {
             enum: typeNames,
+            title: "Task",
             type: "string"
           }
         },
         required: ["typename"],
         type: "object"
       },
+      title: "Tasks",
       type: "array"
     }
   },

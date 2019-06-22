@@ -43,6 +43,7 @@ export class TaskMeta extends EventEmitter {
         "be the constructor for the class it represents");
     }
     this.schema = init.schema || {};
+    this.schema.title = "";
 
     if (init.schemaTransform) {
       init.schemaTransform(this.schema);
