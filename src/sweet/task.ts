@@ -1,7 +1,5 @@
 import {EventEmitter} from "events";
 import {TaskMeta} from "./task-meta";
-
-process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
 
 export type TaskData = Record<string, any>

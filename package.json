@@ -8,7 +8,8 @@
     "build-sweet-pack": "./build-sweet-pack.sh",
     "build-tasks": "./build-tasks.sh",
     "build-page": "./build-page.sh",
-    "start": "npm run build"
+    "start": "npm run build",
+    "postinstall": "patch-package"
   },
   "author": "Trevor Sundberg",
   "license": "MIT",
@@ -42,6 +43,7 @@
     "memfs": "^2.15.4",
     "node-dir": "^0.1.17",
     "node-fetch": "^2.5.0",
+    "patch-package": "^6.1.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-jsonschema-form": "^1.6.1",

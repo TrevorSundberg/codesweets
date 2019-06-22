@@ -1,7 +1,5 @@
 import {Task} from "./task";
 import {TaskMeta} from "./task-meta";
-
-process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
 
 export class TaskRoot extends Task {

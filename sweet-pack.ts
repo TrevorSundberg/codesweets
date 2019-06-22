@@ -86,6 +86,7 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
       __filename: true,
       child_process: "empty",
       dns: "mock",
+      fs: false,
       fsevents: true,
       global: true,
       inspector: true,
@@ -111,9 +112,6 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
       })
     ],
     resolve: {
-      alias: {
-        fs: "memfs"
-      },
       extensions: [
         ".tsx",
         ".ts",

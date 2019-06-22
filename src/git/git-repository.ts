@@ -2,8 +2,6 @@ import * as git from "isomorphic-git";
 import {Directory, DirectoryData} from "../file/file";
 import {EventEmitter} from "events";
 import {TaskMeta} from "../sweet/sweet";
-
-process.env.MEMFS_DONT_WARN = true as unknown as string;
 import {Volume} from "memfs";
 
 export interface GitRepositoryData extends DirectoryData {
