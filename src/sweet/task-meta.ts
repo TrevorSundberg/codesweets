@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+import {EventEmitter} from "events";
 import {JSONSchema6} from "json-schema";
 
 const ajv = new Ajv();
@@ -15,7 +16,7 @@ export interface TaskMetaInit {
   outputs? : TaskConstructor[];
 }
 
-export class TaskMeta {
+export class TaskMeta extends EventEmitter {
   public readonly typename: string;
 
   public readonly construct: TaskConstructor;
@@ -31,6 +32,7 @@ export class TaskMeta {
   public readonly validate: (data: any) => string | null;
 
   public constructor (init: TaskMetaInit) {
+    super();
     this.typename = init.typename;
     this.construct = init.construct;
     if (!init.construct) {
@@ -48,5 +50,10 @@ export class TaskMeta {
     this.outputs = init.outputs || [];
     const ajvValidate = ajv.compile(this.schema);
     this.validate = (data) => ajvValidate(data) ? null : ajv.errorsText(ajvValidate.errors);
+
+    const globals: any = window || global;
+    if (globals.ontaskmeta) {
+      globals.ontaskmeta(this);
+    }
   }
 }

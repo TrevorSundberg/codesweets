@@ -4,6 +4,8 @@ import Form from "react-jsonschema-form";
 import {Hello} from "./components/hello";
 import {JSONSchema6} from "json-schema";
 
+type TaskMeta = import("../sweet/sweet").TaskMeta
+
 ReactDOM.render(
   <Hello compiler="TypeScript" framework="React" />,
   document.getElementById("example")
@@ -14,55 +16,53 @@ const loadJS = (url: string): Promise<any> => eval(`import(${JSON.stringify(url)
 
 const log = (type: any) => console.log.bind(console, type);
 
-loadJS("/bin/tasks/github/github.js").then((GitHub) => {
-  const typeNames: string[] = [];
-  const oneOf: JSONSchema6[] = [];
 
-  const schema: JSONSchema6 = {
-    definitions: {},
-    properties: {
-      components: {
-        items: {
-          dependencies: {
-            typename: {
-              oneOf
-            }
-          },
-          properties: {
-            typename: {
-              enum: typeNames,
-              type: "string"
-            }
-          },
-          required: ["typename"],
-          type: "object"
-        },
-        type: "array"
-      }
-    },
-    type: "object"
-  };
+const typeNames: string[] = [];
+const oneOf: JSONSchema6[] = [];
 
-  // eslint-disable-next-line guard-for-in
-  for (const prop in GitHub.default) {
-    const value = GitHub.default[prop];
-    if (value && typeof value.meta === "object" && value.meta.typename) {
-      schema.definitions[value.meta.typename] = value.meta.schema;
-      typeNames.push(value.meta.typename);
-
-      const componentSchema: JSONSchema6 = {
-        properties: {
-          data: value.meta.schema,
+const schema: JSONSchema6 = {
+  definitions: {},
+  properties: {
+    components: {
+      items: {
+        dependencies: {
           typename: {
-            enum: [value.meta.typename]
+            oneOf
           }
-        }
-      };
-      oneOf.push(componentSchema);
-
-      console.log(value.meta.typename);
+        },
+        properties: {
+          typename: {
+            enum: typeNames,
+            type: "string"
+          }
+        },
+        required: ["typename"],
+        type: "object"
+      },
+      type: "array"
     }
-  }
+  },
+  type: "object"
+};
+
+const globals: any = window || global;
+globals.ontaskmeta = (meta: TaskMeta) => {
+  schema.definitions[meta.typename] = meta.schema;
+  typeNames.push(meta.typename);
+  const componentSchema: JSONSchema6 = {
+    properties: {
+      data: meta.schema,
+      typename: {
+        enum: [meta.typename]
+      }
+    }
+  };
+  oneOf.push(componentSchema);
+
+  console.log(meta.typename, JSON.stringify(meta.schema));
+};
+
+loadJS("/bin/tasks/github/github.js").then(() => {
   console.log(JSON.stringify(schema));
   ReactDOM.render(
     <Form schema={schema}
