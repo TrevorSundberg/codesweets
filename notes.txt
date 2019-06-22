@@ -1,3 +1,11 @@
+But dependencies are going to be an issue
+ - I guess for now we can just allow you to create whatever configuration you want and then validate it when we run
+ - Like you can place anything anywhere, but then we do error messages that say invalid config
+ - I like this!
+
+If we're going to create the components and manipulate them live, we need to be able to set the data at any time
+- But really why I guess? We know dependencies, schema, etc... no need to create them yet
+
 Function.name is not reliable even with setting not to mangle function names
  - In some cases it adds the namespaces/module/filename to the class name
  - Might be easier if we just make it called like 'type' or something
