@@ -6,6 +6,7 @@ import webpack from "webpack";
 const settings: TJS.PartialArgs = {
   excludePrivate: true,
   ignoreErrors: true,
+  ref: false,
   required: true,
   titles: true
 };
