@@ -102,6 +102,9 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
       libraryTarget: "var",
       path: outDir
     },
+    performance: {
+      hints: false
+    },
     plugins: [
       new webpack.DefinePlugin({
         "process.env": {
