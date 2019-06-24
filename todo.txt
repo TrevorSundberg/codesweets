@@ -10,10 +10,19 @@ DONE - Schema generator doesn't recursively pull in definitions
 DONE - Fix / patch memfs to not warn and not have the process issue
 DONE - Make components addable/removable
 DONE - Make certain components hidden (not addable)
+DONE - Fix buttons / style / theme (make it reasonable)
+DONE - Submitting should run the components
 
-Fix buttons / style / theme (make it reasonable)
+Need to capture errors and show them in the correct places
+ - At least the component names (or possibly members too)
 
-Submitting should run the components
+
+Expand and contract components (keep the name showing)
+Drag to re-order
+Automatically add single depdenencies (or an empty restricted template)
+Advanced properties that we hide by default
+
+Make a side by side view of the json that gets written, as well as a console
 
 Custom UI for the components dropdown that lists all components from a database and loads them upon clicking
 

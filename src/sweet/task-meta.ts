@@ -4,7 +4,9 @@ import {JSONSchema6} from "json-schema";
 
 const ajv = new Ajv();
 
-export type TaskConstructor = Function & { meta: TaskMeta }
+type Task = import("./task").Task;
+type TaskData = import("./task").TaskData;
+export type TaskConstructor = (new (owner: Task, data: TaskData) => Task) & { meta: TaskMeta }
 
 export interface TaskMetaInit {
   typename: string;
@@ -34,6 +36,10 @@ export class TaskMeta extends EventEmitter {
 
   public readonly hidden: boolean;
 
+  public static loaded: TaskMeta[] = [];
+
+  public static loadedByName: Record<string, TaskMeta> = {}
+
   public constructor (init: TaskMetaInit) {
     super();
     this.typename = init.typename;
@@ -59,8 +65,10 @@ export class TaskMeta extends EventEmitter {
     this.validate = (data) => ajvValidate(data) ? null : ajv.errorsText(ajvValidate.errors);
     this.hidden = init.hidden;
 
-    const globals: any = window || global;
+    const globals: any = global;
     if (globals.ontaskmeta) {
+      TaskMeta.loaded.push(this);
+      TaskMeta.loadedByName[this.typename] = this;
       globals.ontaskmeta(this);
     }
   }

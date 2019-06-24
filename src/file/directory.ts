@@ -7,7 +7,7 @@ export interface DirectoryData {
   directory: string;
 }
 
-export abstract class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
+export class Directory<T extends DirectoryData = DirectoryData> extends TaskWithData<T> {
   public static meta: TaskMeta = new TaskMeta({
     construct: Directory,
     inputs: [],

@@ -59,7 +59,8 @@ export class Task extends EventEmitter {
     }
 
     if (owner) {
-      owner.add(this);
+      owner.ensure(this.meta);
+      owner.components.push(this);
     }
   }
 
@@ -72,10 +73,18 @@ export class Task extends EventEmitter {
     return meta;
   }
 
-  /**
-   * Serialize the task and it's child components.
-   * Only call this once constructed (not during or after initialization).
-   */
+  public static deserialize (object: TaskSaved, owner: Task = null): Task {
+    console.log(TaskMeta.loadedByName);
+    console.log(object);
+    const meta = TaskMeta.loadedByName[object.typename || "TaskRoot"];
+    // eslint-disable-next-line new-cap
+    const task = new meta.construct(owner, object.data);
+    if (object.components) {
+      object.components.forEach((saved) => Task.deserialize(saved, task));
+    }
+    return task;
+  }
+
   public serialize (): TaskSaved {
     if (this.phase !== "constructed") {
       throw Error(`Only serialize a task when constructed (task was '${this.phase}')`);
@@ -134,19 +143,6 @@ export class Task extends EventEmitter {
     }
     const component = this.owner.has<T>(base, this.ownerIndex);
     return component ? component : this.owner.findAbove<T>(base);
-  }
-
-  private add<T extends Task = Task> (value: T) {
-    this.ensure(value.meta);
-
-    /*
-     * Singleton enforcement...
-     *if (this.has(constructor)) {
-     *  throw new Error(`${value.meta.typename} already exists within task ${this.meta.typename}`);
-     *}
-     */
-
-    this.components.push(value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function

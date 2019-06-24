@@ -1,10 +1,12 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Form from "react-jsonschema-form";
+import Form, {IChangeEvent} from "react-jsonschema-form";
 import {Hello} from "./components/hello";
 import {JSONSchema6} from "json-schema";
 
-type TaskMeta = import("../sweet/sweet").TaskMeta
+type TaskSaved = import("../sweet/sweet").TaskSaved;
+type TaskRoot = import("../sweet/sweet").TaskRoot;
+type TaskMeta = import("../sweet/sweet").TaskMeta;
 
 ReactDOM.render(
   <Hello compiler="TypeScript" framework="React" />,
@@ -47,7 +49,7 @@ const schema: JSONSchema6 = {
   type: "object"
 };
 
-const globals: any = window || global;
+const globals: any = global;
 globals.ontaskmeta = (meta: TaskMeta) => {
   if (meta.hidden) {
     return;
@@ -67,14 +69,24 @@ globals.ontaskmeta = (meta: TaskMeta) => {
   console.log(meta.typename, JSON.stringify(meta.schema));
 };
 
-loadJS("/bin/tasks/github/github.js").then(() => {
-  console.log(JSON.stringify(schema));
-  ReactDOM.render(
-    <Form schema={schema}
-      onChange={log("changed")}
-      onSubmit={log("submitted")}
-      onError={log("errors")} />
-    , document.getElementById("app")
-  );
+
+loadJS("/bin/tasks/sweet/sweet.js").then((sweet) => {
+  const submit = (event: IChangeEvent<TaskSaved>) => {
+    const saved = event.formData;
+    const task = sweet.default.Task.deserialize(saved) as TaskRoot;
+    console.log("root", task);
+    task.run();
+  };
+
+  loadJS("/bin/tasks/github/github.js").then(() => {
+    console.log(JSON.stringify(schema));
+    ReactDOM.render(
+      <Form schema={schema}
+        onChange={log("changed")}
+        onSubmit={submit}
+        onError={log("errors")} />
+      , document.getElementById("app")
+    );
+  });
 });
 

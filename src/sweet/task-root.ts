@@ -19,8 +19,7 @@ export class TaskRoot extends Task {
   }
 
   public get log () {
-    // eslint-disable-next-line no-empty-function
-    return this.logger || (() => {});
+    return this.logger || console.log;
   }
 
   public set log (callback: (...args: any[]) => any) {
