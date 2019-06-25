@@ -4,7 +4,7 @@
 Quickly setup project repositories with templates, tests, documentation, and continuous integration.
 
 # demo
-Visit the [playground](codesweets.openode.io).
+Visit the [playground](https://codesweets.openode.io).
 
 # building
 ```
