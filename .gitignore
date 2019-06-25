@@ -1,3 +1,4 @@
 node_modules
 bin
 *.sweet-pack-tsconfig.json
+.openode

@@ -12,10 +12,12 @@ DONE - Make components addable/removable
 DONE - Make certain components hidden (not addable)
 DONE - Fix buttons / style / theme (make it reasonable)
 DONE - Submitting should run the components
+DONE - Deploy to openode
+
+Setup TravisCI to build all the projects (with GitHub)
 
 Need to capture errors and show them in the correct places
  - At least the component names (or possibly members too)
-
 
 Expand and contract components (keep the name showing)
 Drag to re-order
