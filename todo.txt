@@ -13,26 +13,31 @@ DONE - Make certain components hidden (not addable)
 DONE - Fix buttons / style / theme (make it reasonable)
 DONE - Submitting should run the components
 DONE - Deploy to openode
-
-Setup TravisCI to build all the projects (with GitHub)
+DONE - Setup TravisCI to build all the projects (with GitHub)
+DONE - Make a schema we can validate for TaskSaved
+DONE - Remove webpack size limitation warnings (at least in sweetpack)
+DONE - Make sure we can declare external libraries with the sweet packer (basically just other components)
+DONE - We can't easily pack everything up, but we can declare externals
+DONE - So we can have multiple builds
+DONE - We can add import lines ourselves
+DONE - Setup webpack with React - https://www.valentinog.com/blog/babel/
+DONE - Get React JSX working with TypeScript
 
 Need to capture errors and show them in the correct places
  - At least the component names (or possibly members too)
+
+Make a side by side view of the json that gets written - can be entered by the user
+
+Console output on the page
 
 Expand and contract components (keep the name showing)
 Drag to re-order
 Automatically add single depdenencies (or an empty restricted template)
 Advanced properties that we hide by default
 
-Make a side by side view of the json that gets written, as well as a console
-
 Custom UI for the components dropdown that lists all components from a database and loads them upon clicking
 
-Remove webpack size limitation warnings (at least in sweetpack)
-
-Remove the USER/PASS stuff
-
-Make a schema we can validate for TaskSaved
+Remove the USER/PASS stuff - replace with a json loader that loads a pre-existing config file
 
 Need to get the database working so we can detect all exported classes
  - Or we just have users enter the names of the components into a database... easier!
@@ -41,18 +46,6 @@ Need to get the database working so we can detect all exported classes
  - The only thing is being able to import the javascript files on the fly
  - We can just make a premade list of the files for now
 
-
 Source mapping is probably messed up by my additions, see if we can make a webpack plugin to do it properly
 
 Find a way to make it an error if you include another sweet packed file directly (not imported)
-
-Make sure we can declare external libraries with the sweet packer (basically just other components)
-
-We can't easily pack everything up, but we can declare externals
- - So we can have multiple builds
- - We can add import lines ourselves
- - We can export default in the header
-
-Setup webpack with React - https://www.valentinog.com/blog/babel/
-Get React JSX working with TypeScript
-Building with a build server (Travis CI)

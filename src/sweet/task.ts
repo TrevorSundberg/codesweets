@@ -10,6 +10,9 @@ export interface TaskSaved {
   components?: TaskSaved[];
 }
 
+export type TaskLogType = "info" | "error";
+export type TaskLog = (type: TaskLogType, task: Task, ...args: any[]) => any;
+
 export class Task extends EventEmitter {
   public static meta: TaskMeta = new TaskMeta({
     construct: Task,
@@ -38,7 +41,7 @@ export class Task extends EventEmitter {
     return this.root.fs;
   }
 
-  public get log (): (...args: any[]) => any {
+  public get log (): TaskLog {
     return this.root.log;
   }
 
@@ -50,7 +53,7 @@ export class Task extends EventEmitter {
     this.owner = owner;
     this.ownerIndex = owner ? owner.components.length : -1;
 
-    this.log(`${this.meta.typename} constructed`);
+    this.log("info", this, `${this.meta.typename} constructed`);
 
     // Perform all validation first before we do any side effects on other tasks.
     const errors = this.meta.validate(data);
@@ -163,10 +166,17 @@ export class Task extends EventEmitter {
 
   private async walk (func: string, visitor: (component: Task) => Promise<any>) {
     for (const component of this.components) {
-      this.log(`Begin ${component.meta.typename} ${func}`);
-      await visitor(component);
+      this.log("info", this, `Begin ${component.meta.typename} ${func}`);
+      try {
+        await visitor(component);
+      } catch (err) {
+        if (err.message !== "abort") {
+          this.log("error", component, err);
+        }
+        throw new Error("abort");
+      }
       await component.walk(func, visitor);
-      this.log(`End ${component.meta.typename} ${func}`);
+      this.log("info", this, `End ${component.meta.typename} ${func}`);
     }
   }
 
@@ -201,9 +211,15 @@ export class Task extends EventEmitter {
   }
 
   protected async run () {
-    await this.initialize();
-    await this.allInitialized();
-    await this.destroy();
-    await this.allDestroyed();
+    try {
+      await this.initialize();
+      await this.allInitialized();
+      await this.destroy();
+      await this.allDestroyed();
+    } catch (err) {
+      if (err.message !== "abort") {
+        throw err;
+      }
+    }
   }
 }
