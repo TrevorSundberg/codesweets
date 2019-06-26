@@ -1,6 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Form, {IChangeEvent} from "react-jsonschema-form";
+// eslint-disable-next-line id-length
+import $ from "jquery";
 import {Hello} from "./components/hello";
 import {JSONSchema6} from "json-schema";
 
@@ -75,6 +77,16 @@ loadJS("/bin/tasks/sweet/sweet.js").then((sweet) => {
     const saved = event.formData;
     const task = sweet.default.Task.deserialize(saved) as TaskRoot;
     console.log("root", task);
+    task.logger = (component, type, ...args) => {
+      console.log(type, ...args);
+      if (type === "error") {
+        const query: any = $(`#root_components_${component.id}_typename`);
+        query.popover({
+          content: args.join("\n")
+        }).
+          popover("show");
+      }
+    };
     task.run();
   };
 

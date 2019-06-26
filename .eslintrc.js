@@ -50,6 +50,7 @@ module.exports = {
     "@typescript-eslint/camelcase": "off",
     "global-require": "off",
     "callback-return": "off",
+    "no-plusplus": "off",
 
     "default-case": "off",
   },

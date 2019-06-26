@@ -18,8 +18,10 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^16.27.3",
+    "@types/bootstrap": "^4.3.0",
     "@types/dts-bundle": "0.0.31",
     "@types/html-webpack-plugin": "^3.2.0",
+    "@types/jquery": "^3.3.30",
     "@types/json-schema": "^7.0.3",
     "@types/memory-fs": "^0.3.2",
     "@types/node": "^12.0.8",

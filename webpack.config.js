@@ -4,6 +4,9 @@ const path = require("path");
 module.exports = {
   devtool: "source-map",
   entry: "./src/page/index.tsx",
+  externals: {
+    jquery: "jQuery"
+  },
   mode: process.env.NODE_ENV ? process.env.NODE_ENV : "production",
   module: {
     rules: [

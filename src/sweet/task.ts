@@ -38,6 +38,8 @@ export class Task extends EventEmitter {
 
   public readonly rawData: TaskData;
 
+  public id: number = -1;
+
   private phase: "constructed" | "initialized" = "constructed";
 
   public get fs (): InstanceType<typeof Volume> {
@@ -174,7 +176,7 @@ export class Task extends EventEmitter {
         await visitor(component);
       } catch (err) {
         if (err.message !== "abort") {
-          this.log("error", component, err);
+          component.log("error", err);
         }
         throw new Error("abort");
       }
@@ -184,7 +186,9 @@ export class Task extends EventEmitter {
   }
 
   private async initialize () {
+    let idCounter = 0;
     await this.walk("initialize", async (component) => {
+      component.id = idCounter++;
       const {inputs, typename} = component.meta;
 
       for (const input of inputs) {
