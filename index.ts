@@ -8,7 +8,6 @@ import Test from "./src/test/test";
   await Test;
 
   const root = new TaskRoot();
-  root.log = console.log;
 
   const png =
     "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAJ0lEQVR42mP4/5/h" +

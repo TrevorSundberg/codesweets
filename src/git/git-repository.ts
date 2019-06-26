@@ -43,6 +43,6 @@ export class GitRepository extends Directory<GitRepositoryData> {
   }
 
   protected async onInitialize () {
-    this.on("message", this.log);
+    this.on("message", (message) => this.log("info", message));
   }
 }

@@ -2,6 +2,8 @@ import {EventEmitter} from "events";
 import {TaskMeta} from "./task-meta";
 import {Volume} from "memfs";
 
+type TaskRoot = import("./task-root").TaskRoot;
+
 export type TaskData = Record<string, any>
 
 export interface TaskSaved {
@@ -11,7 +13,8 @@ export interface TaskSaved {
 }
 
 export type TaskLogType = "info" | "error";
-export type TaskLog = (type: TaskLogType, task: Task, ...args: any[]) => any;
+export type TaskLog = (task: Task, type: TaskLogType, ...args: any[]) => any;
+export type TaskLogger = (type: TaskLogType, ...args: any[]) => any;
 
 export class Task extends EventEmitter {
   public static meta: TaskMeta = new TaskMeta({
@@ -21,7 +24,7 @@ export class Task extends EventEmitter {
     typename: "Task"
   })
 
-  public readonly root: Task;
+  public readonly root: TaskRoot;
 
   public readonly owner: Task;
 
@@ -41,19 +44,19 @@ export class Task extends EventEmitter {
     return this.root.fs;
   }
 
-  public get log (): TaskLog {
-    return this.root.log;
+  public get log (): TaskLogger {
+    return (type, ...args) => this.root.logTask(this, type, ...args);
   }
 
   public constructor (owner: Task, data: TaskData = {}) {
     super();
 
-    this.root = owner ? owner.root : this;
+    this.root = owner ? owner.root : this as Task as TaskRoot;
     this.rawData = data;
     this.owner = owner;
     this.ownerIndex = owner ? owner.components.length : -1;
 
-    this.log("info", this, `${this.meta.typename} constructed`);
+    this.log("info", `${this.meta.typename} constructed`);
 
     // Perform all validation first before we do any side effects on other tasks.
     const errors = this.meta.validate(data);
@@ -166,7 +169,7 @@ export class Task extends EventEmitter {
 
   private async walk (func: string, visitor: (component: Task) => Promise<any>) {
     for (const component of this.components) {
-      this.log("info", this, `Begin ${component.meta.typename} ${func}`);
+      this.log("info", `Begin ${component.meta.typename} ${func}`);
       try {
         await visitor(component);
       } catch (err) {
@@ -176,7 +179,7 @@ export class Task extends EventEmitter {
         throw new Error("abort");
       }
       await component.walk(func, visitor);
-      this.log("info", this, `End ${component.meta.typename} ${func}`);
+      this.log("info", `End ${component.meta.typename} ${func}`);
     }
   }
 

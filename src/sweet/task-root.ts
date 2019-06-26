@@ -12,18 +12,14 @@ export class TaskRoot extends Task {
 
   private volume = new Volume();
 
-  private logger: TaskLog;
+  public logger: TaskLog;
 
   public get fs () {
     return this.volume;
   }
 
-  public get log () {
+  public get logTask (): TaskLog {
     return this.logger || console.log;
-  }
-
-  public set log (callback: TaskLog) {
-    this.logger = callback;
   }
 
   public constructor () {
