@@ -81,6 +81,12 @@ export class Task extends EventEmitter {
     return meta;
   }
 
+  public get catch () {
+    return (err: any) => {
+      this.log("error", err);
+    };
+  }
+
   public static deserialize (object: TaskSaved, owner: Task = null): Task {
     console.log(TaskMeta.loadedByName);
     console.log(object);

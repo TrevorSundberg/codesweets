@@ -22,9 +22,20 @@ DONE - So we can have multiple builds
 DONE - We can add import lines ourselves
 DONE - Setup webpack with React - https://www.valentinog.com/blog/babel/
 DONE - Get React JSX working with TypeScript
+DONE - Need to capture errors and show them in the correct places
+DONE - Add a catch handler for err on the component that logs an error
 
-Need to capture errors and show them in the correct places
- - At least the component names (or possibly members too)
+Wait until linux boots up entirely by waiting for a particular read signal
+ - The filesystem is initialized with a shell script that contains their file
+ - Or maybe a .bashrc?
+ - Let them upload a filesystem themselves
+ - Option to initialize the filesystem with previous results from fs (option default true, slower)
+ - At the end we copy everything to /mnt/ and download it (option default true, slower)
+
+Host the isogit proxy (only allow requests from our domain)
+Host the linuxjs proxy (only allow requests from our domain)
+
+Setup linuxjs so it can run dpkg/apt/apt-get/sudo (just for convenience)
 
 Make a side by side view of the json that gets written - can be entered by the user
 
