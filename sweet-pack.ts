@@ -24,7 +24,7 @@ export interface Config {
   outDir: string;
 }
 
-const packSingle = async (file: string, outDirectory: string, deps: Dependencies) => {
+const packSingle = async (file: string, outDirectory: string, deps: Dependencies, logger: Logger) => {
   const {name} = path.parse(file);
   const outDir = path.join(outDirectory, name);
   const declarationDir = path.join(outDir, "declarations");
@@ -86,7 +86,7 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
       __filename: true,
       child_process: "empty",
       dns: "mock",
-      fs: false,
+      fs: "empty",
       fsevents: true,
       global: true,
       inspector: true,
@@ -138,27 +138,30 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
     resolve(stats);
   }));
 
-  let final = "var __imports = {}\n";
-  final += dependencies.map((dep, index) => "" +
-    `import __import${index} from ${JSON.stringify(`../${dep.name}/${dep.name}.js`)};\n` +
-    `__imports[${JSON.stringify(dep.name)}] = __import${index};\n`).join("");
-  const jsPath = path.join(outDir, `${name}.js`);
-  final += await fs.promises.readFile(jsPath, "utf8");
-  final += `\nexport default ${name};`;
+  try {
+    let final = "var __imports = {}\n";
+    final += dependencies.map((dep, index) => "" +
+  `import __import${index} from ${JSON.stringify(`../${dep.name}/${dep.name}.js`)};\n` +
+  `__imports[${JSON.stringify(dep.name)}] = __import${index};\n`).join("");
+    const jsPath = path.join(outDir, `${name}.js`);
+    final += await fs.promises.readFile(jsPath, "utf8");
+    final += `\nexport default ${name};`;
+    await fs.promises.writeFile(jsPath, final, "utf8");
 
-  await fs.promises.writeFile(jsPath, final, "utf8");
-
-  const declFiles = dir.files(declarationDir, {sync: true});
-  const declFileName = `${name}.d.ts`;
-  const baseDeclFile = declFiles.find((declFile) => path.basename(declFile) === declFileName);
-  if (baseDeclFile) {
-    dts.bundle({
-      baseDir: declarationDir,
-      main: baseDeclFile,
-      name,
-      out: path.join(outDir, declFileName),
-      outputAsModuleFolder: true
-    });
+    const declFiles = await dir.promiseFiles(declarationDir);
+    const declFileName = `${name}.d.ts`;
+    const baseDeclFile = declFiles.find((declFile) => path.basename(declFile) === declFileName);
+    if (baseDeclFile) {
+      dts.bundle({
+        baseDir: declarationDir,
+        main: baseDeclFile,
+        name,
+        out: path.join(outDir, declFileName),
+        outputAsModuleFolder: true
+      });
+    }
+  } catch (err) {
+    logger(err);
   }
 
   return result;
@@ -167,7 +170,8 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
 export default async (config: Config) => {
   const logger = config.logger || console.log;
   const outDir = path.resolve(config.outDir || "dist");
-  const results = await Promise.all(Object.entries(config.entry).map((pair) => packSingle(pair[0], outDir, pair[1])));
+  const entries = Object.entries(config.entry);
+  const results = await Promise.all(entries.map((pair) => packSingle(pair[0], outDir, pair[1], logger)));
   results.forEach((result) => {
     logger(`\n${"-".repeat(80)}`);
     logger(result.toString());
