@@ -71,8 +71,9 @@ globals.ontaskmeta = (meta: TaskMeta) => {
   console.log(meta.typename, JSON.stringify(meta.schema));
 };
 
+const main = async () => {
+  const sweet = await loadJS("/bin/tasks/sweet/sweet.js");
 
-loadJS("/bin/tasks/sweet/sweet.js").then((sweet) => {
   const submit = (event: IChangeEvent<TaskSaved>) => {
     const saved = event.formData;
     const task = sweet.default.Task.deserialize(saved) as TaskRoot;
@@ -83,22 +84,25 @@ loadJS("/bin/tasks/sweet/sweet.js").then((sweet) => {
         const query: any = $(`#root_components_${component.id}_typename`);
         query.popover({
           content: args.join("\n")
-        }).
-          popover("show");
+        }).popover("show");
       }
     };
     task.run();
   };
 
-  loadJS("/bin/tasks/github/github.js").then(() => {
-    console.log(JSON.stringify(schema));
-    ReactDOM.render(
-      <Form schema={schema}
-        onChange={log("changed")}
-        onSubmit={submit}
-        onError={log("errors")} />
-      , document.getElementById("app")
-    );
-  });
-});
+  await Promise.all([
+    loadJS("/bin/tasks/file/file.js"),
+    loadJS("/bin/tasks/git/git.js"),
+    loadJS("/bin/tasks/github/github.js")
+  ]);
 
+  console.log(JSON.stringify(schema));
+  ReactDOM.render(
+    <Form schema={schema}
+      onChange={log("changed")}
+      onSubmit={submit}
+      onError={log("errors")} />
+    , document.getElementById("app")
+  );
+};
+main();
