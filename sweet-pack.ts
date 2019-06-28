@@ -36,7 +36,7 @@ const packSingle = async (file: string, outDirectory: string, deps: Dependencies
       esModuleInterop: true,
       module: "esnext",
       moduleResolution: "node",
-      noImplicitAny: true,
+      noImplicitAny: false,
       outDir,
       preserveConstEnums: true,
       removeComments: false,
