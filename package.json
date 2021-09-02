@@ -47,7 +47,7 @@
     "eslint-plugin-react": "^7.13.0",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "isomorphic-git": "^0.55.2",
+    "isomorphic-git": "^1.8.2",
     "json-schema": "^0.2.3",
     "memfs": "^2.15.4",
     "node-dir": "^0.1.17",
